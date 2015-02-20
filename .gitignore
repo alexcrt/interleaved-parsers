@@ -1,0 +1,33 @@
+/lib/ant/*.jar
+/lib/*.jar
+/test/files/codelib/*.jar
+/test/files/lib/*.jar
+/test/files/speclib/instrumented.jar
+/tools/*.jar
+
+# Developer specific Ant properties
+/build.properties
+/buildcharacter.properties
+
+# target directories for ant build
+/build/
+/dists/
+
+# other
+/out/
+/bin/
+/sandbox/
+/.ant-targets-build.xml
+
+# eclipse, intellij
+/.classpath
+/.project
+/src/intellij*/*.iml
+/src/intellij*/*.ipr
+/src/intellij*/*.iws
+**/.cache
+/.idea
+/.settings
+
+# Standard symbolic link to build/quick/bin
+/qbin
