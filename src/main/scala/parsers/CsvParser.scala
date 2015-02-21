@@ -26,8 +26,8 @@ object CsvParser extends RegexParsers {
 
     def field: Parser[String] = escaped | nonescaped
     
-    def nonescaped: Parser[String] = rep(STRING_LITERAL) map(x => x.mkString(""))
+    def nonescaped: Parser[String] = rep(STRING_LITERAL) map(x => x.mkString)
     
-    def escaped: Parser[String] = DQUOTE ~>(STRING_LITERAL | "," | CRLF | DQUOTE2)<~DQUOTE
+    def escaped: Parser[String] = DQUOTE ~>(STRING_LITERAL | "," | CRLF | DQUOTE2)<~DQUOTE map(x => x.mkString)
   
 }
