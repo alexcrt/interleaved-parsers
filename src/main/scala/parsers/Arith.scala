@@ -2,9 +2,9 @@ package parsercombinator
 
 import scala.util.parsing.combinator._
 
-class Arith(input: CharSequence) extends JavaTokenParsers {
+object Arith extends JavaTokenParsers {
   
-    def parse(): ParseResult[Any] = {
+    def parse(input: CharSequence): ParseResult[Any] = {
         parseAll(expr, input)
     }
     

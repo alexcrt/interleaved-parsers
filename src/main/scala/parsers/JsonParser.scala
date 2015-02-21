@@ -3,9 +3,9 @@ package parsers
 import scala.util.parsing.combinator._
 import java.io.Reader
 
-class JsonParser(input: Reader) extends JavaTokenParsers {
+object JsonParser extends JavaTokenParsers {
 
-    def parse(): ParseResult[Any] = {
+    def parse(input: Reader): ParseResult[Any] = {
         parseAll(value, input)
     }
 

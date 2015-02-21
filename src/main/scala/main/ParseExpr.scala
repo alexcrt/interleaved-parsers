@@ -6,13 +6,13 @@ import parsers.CsvParser
 
 object ParseExpr {
     def main(args: Array[String]) {
-        /*val result = new Arith(args(0)).parse()
+        /*val result = Arith.parse(args(0))
         println(result)
         
-        val jsonResult = new JsonParser(new FileReader(args(1))).parse()
+        val jsonResult = JsonParser.parse(new FileReader(args(1)))
         println(jsonResult)*/
         
-        val csvResult = new CsvParser(new FileReader(args(2))).parse()
+        val csvResult = CsvParser.parse(new FileReader(args(2)))
         println(csvResult)
     }
 }
