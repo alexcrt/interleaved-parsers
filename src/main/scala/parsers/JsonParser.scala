@@ -5,8 +5,9 @@ import java.io.Reader
 
 object JsonParser extends JavaTokenParsers {
 
-    def parse(input: Reader): ParseResult[Any] = {
-        parseAll(value, input)
+    def parse(input: Reader) = parseAll(value, input) match {
+        case Success(res, _) => res
+        case e => throw new RuntimeException(e.toString);
     }
 
     def value: Parser[Any] = obj | arr | stringLiteral | floatingPointNumber ^^ (_.toDouble)| 

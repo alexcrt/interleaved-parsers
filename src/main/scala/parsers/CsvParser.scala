@@ -6,7 +6,7 @@ import java.io.Reader
 /**
  * CSV Parser based on RFC4180
  */
-object CsvParser extends JavaTokenParsers {
+object CsvParser extends RegexParsers {
 
     override def skipWhitespace = false
     
