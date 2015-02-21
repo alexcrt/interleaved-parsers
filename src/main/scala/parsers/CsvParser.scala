@@ -11,7 +11,7 @@ object CsvParser extends RegexParsers {
     override def skipWhitespace = false
     
     def CRLF = "\r\n" | "\n"
-    def STRING_LITERAL = "[^\",\r\n]".r
+    def TEXTDATA = "[^\",\r\n]".r
     def DQUOTE = "\""
     def DQUOTE2 = "\"\""
     
@@ -26,8 +26,8 @@ object CsvParser extends RegexParsers {
 
     def field: Parser[String] = escaped | nonescaped
     
-    def nonescaped: Parser[String] = rep(STRING_LITERAL) map(x => x.mkString)
+    def nonescaped: Parser[String] = rep(TEXTDATA) map(x => x.mkString)
     
-    def escaped: Parser[String] = DQUOTE ~>(STRING_LITERAL | "," | CRLF | DQUOTE2)<~DQUOTE map(x => x.mkString)
+    def escaped: Parser[String] = DQUOTE ~>(TEXTDATA | "," | CRLF | DQUOTE2)<~DQUOTE map(x => x.mkString)
   
 }
