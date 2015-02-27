@@ -22,7 +22,7 @@ object BnfParser extends RegexParsers {
   def rule: Parser[Map[String, List[String]]] = ('<' ~> ruleName <~ '>') ~ ((whitespace ~ "::=" ~ whitespace) ~> expression) map (x => Map(x._1 -> x._2))
   def expression: Parser[List[String]] = repsep(term, whitespace ~ opt(pipe ~ whitespace))
   def term: Parser[String] = literal | ('<' ~> ruleName <~ '>' map (x  => "<"+x+">"))
-  def literal: Parser[String] = '"' ~ text ~ '"' map {case '"'~ x ~'"' => "\""+x+"\""}
+  def literal: Parser[String] = '"' ~> text <~ '"' map (x => "\""+x+"\"")
   def ruleName: Parser[String] = """\w+""".r
   def text: Parser[String] = """\w+""".r | singleCharacters | empty
 }
