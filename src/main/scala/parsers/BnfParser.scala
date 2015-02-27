@@ -18,7 +18,7 @@ object BnfParser extends RegexParsers {
         case e => throw new RuntimeException(e.toString);
   }
   
-  def syntax: Parser[List[Rule]] = repsep(rule, EOL)
+  def syntax: Parser[Syntax] = repsep(rule, EOL) map (list => Syntax(list))
   def rule: Parser[Rule] = ('<' ~> ruleName <~ '>') ~ ((whitespace ~ "::=" ~ whitespace) ~> expression) map (x => Rule(x._1, x._2))
   def expression: Parser[List[Expression]] = repsep(term, whitespace ~ opt(pipe ~ whitespace))
   def term: Parser[Expression] = literal | '<' ~> ruleName <~ '>'
@@ -29,6 +29,8 @@ object BnfParser extends RegexParsers {
 
 
 sealed abstract class BNFValue
+
+case class Syntax(rules: List[Rule])
 
 case class Rule(rule: RuleExpression, expressions: List[Expression]) extends BNFValue {
   override def toString = rule + " ::= " + expressions.mkString(" ")

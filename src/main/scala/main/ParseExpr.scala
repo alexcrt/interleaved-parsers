@@ -14,6 +14,6 @@ object ParseExpr {
       println(jsonResult)*/
         
       val bnfResult = BnfParser.parse(new FileReader(args(2)))
-      println(bnfResult.mkString("\n"))
+      println(bnfResult.rules.mkString("\n"))
     }
 }
