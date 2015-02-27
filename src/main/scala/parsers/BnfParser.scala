@@ -48,7 +48,7 @@ sealed abstract class BNFValue
 case class Syntax(rules: List[Rule]) extends BNFValue
 
 case class Rule(rule: RuleExpression, expressions: List[BNFValue]) extends BNFValue {
-  override def toString = rule + " ::= " + expressions.mkString(" ")
+  override def toString = rule + " ::= " + expressions.mkString
 }
 case class ExpressionSep (expr: Expression, separator: String) extends BNFValue {
   override def toString = expr + separator
