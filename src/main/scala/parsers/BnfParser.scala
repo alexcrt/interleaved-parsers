@@ -1,8 +1,5 @@
 package parsers
 
-import javafx.scene.control.Separator
-
-import scala.None
 import scala.util.parsing.combinator._
 import java.io.Reader
 
