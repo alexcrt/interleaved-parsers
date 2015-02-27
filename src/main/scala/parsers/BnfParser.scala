@@ -18,11 +18,27 @@ object BnfParser extends RegexParsers {
         case e => throw new RuntimeException(e.toString);
   }
   
-  def syntax: Parser[String] = repsep(rule, EOL) map (x => x.mkString("\n"))
-  def rule: Parser[Map[String, List[String]]] = ('<' ~> ruleName <~ '>') ~ ((whitespace ~ "::=" ~ whitespace) ~> expression) map (x => Map(x._1 -> x._2))
-  def expression: Parser[List[String]] = repsep(term, whitespace ~ opt(pipe ~ whitespace))
-  def term: Parser[String] = literal | ('<' ~> ruleName <~ '>' map (x  => "<"+x+">"))
-  def literal: Parser[String] = '"' ~> text <~ '"' map (x => "\""+x+"\"")
-  def ruleName: Parser[String] = """\w+""".r
-  def text: Parser[String] = """\w+""".r | singleCharacters | empty
+  def syntax: Parser[List[Rule]] = repsep(rule, EOL)
+  def rule: Parser[Rule] = ('<' ~> ruleName <~ '>') ~ ((whitespace ~ "::=" ~ whitespace) ~> expression) map (x => Rule(x._1, x._2))
+  def expression: Parser[List[Expression]] = repsep(term, whitespace ~ opt(pipe ~ whitespace))
+  def term: Parser[Expression] = literal | '<' ~> ruleName <~ '>'
+  def literal: Parser[TextExpression] = '"' ~> text <~ '"'
+  def ruleName: Parser[RuleExpression] = """\w+""".r map (x => RuleExpression(x))
+  def text: Parser[TextExpression] = ("""\w+""".r | singleCharacters | empty) map (x => TextExpression(x))
+}
+
+
+sealed abstract class BNFValue
+
+case class Rule(rule: RuleExpression, expressions: List[Expression]) extends BNFValue {
+  override def toString = rule + " ::= " + expressions.mkString(" ")
+}
+
+sealed abstract class Expression(name: String) extends BNFValue
+
+case class TextExpression(name: String) extends Expression(name) {
+  override def toString = "\"" + name + "\""
+}
+case class RuleExpression(name: String) extends Expression(name) {
+  override def toString = "<" + name + ">"
 }
