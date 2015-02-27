@@ -1,4 +1,4 @@
-package main
+package parsercombinator
 
 import java.io.FileReader
 import parsers.JsonParser
