@@ -25,12 +25,12 @@ object BnfParser extends RegexParsers {
   def expression: Parser[List[ExpressionSep]] = rep(term)
 
   def term: Parser[ExpressionSep] = (literal | '<' ~> ruleName <~ '>')  ~ ((opt(whitespace) ~ opt(pipe ~ whitespace)) map
-    {
-      case Some(f) ~ Some(p~w) => f+p+w
-      case Some(f) ~ None => f
-      case None  ~ Some(p~w) => p+w
-      case None ~ None => ""
-    }) map (x => new ExpressionSep(x._1, x._2))
+                                    {
+                                      case Some(f) ~ Some(p~w) => f+p+w
+                                      case Some(f) ~ None => f
+                                      case None  ~ Some(p~w) => p+w
+                                      case None ~ None => ""
+                                    }) map (x => ExpressionSep(x._1, x._2))
 
   def literal: Parser[TextExpression] = '"' ~> text <~ '"'
 
