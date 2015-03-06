@@ -1,5 +1,6 @@
 ass
 *.log
+.DS_Store
 
 # sbt specific
 dist/*

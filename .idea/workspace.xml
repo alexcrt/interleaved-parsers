@@ -4,31 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/scala/parsers/BnfParser.scala" line="20" mnemonic="7" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edee9ff9-6455-4099-a4d0-17418ca2e7ec" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser$$anonfun$oxo$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser$$anonfun$oxo$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser$$anonfun$oxos$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser$$anonfun$oxos$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser$$anonfun$oxos$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/OXOParser.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser$class.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/StringParsers$$anon$1.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/Main$.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/Main$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser$$anon$1.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser$$anon$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser$$anon$2.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser$$anon$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers$Parser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleParsers.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Failure$.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Failure$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Failure.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Failure.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Result.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Result.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Success$.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Success$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Success.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults$Success.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/SimpleResults.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/StringParsers$class.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/StringParsers$class.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/StringParsers.class" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/experiments/StringParsers.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/experiments/StringParsers.scala" afterPath="$PROJECT_DIR$/src/main/scala/experiments/StringParsers.scala" />
-    </list>
+    <list default="true" id="edee9ff9-6455-4099-a4d0-17418ca2e7ec" name="Default" comment="" />
     <ignored path="parser-combinators.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/target/" />
