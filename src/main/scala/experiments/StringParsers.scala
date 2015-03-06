@@ -11,5 +11,7 @@ trait StringParsers extends SimpleParsers {
   def first(in: Input): Elem = if(in == "") EOI else in(0)
   def rest(in: Input): Input = if(in == "") in else in.substring(1)
   def eoi = accept(EOI) // accept is now defined in SimpleParsers
-
+  def consumeFirst: Parser[Elem] = Parser{in ⇒
+      Success(first(in), rest(in))
+    }
 }
