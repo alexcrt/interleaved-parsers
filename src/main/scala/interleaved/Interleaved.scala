@@ -20,12 +20,13 @@ object Interleaved extends RegexParsers {
 
   def main(args: Array[String]) = {
     println(wikiParseReader(new CharSequenceReader("3Sca2la")))
-    //println(wikiParseReader(new CharSequenceReader("3Chu2nk3ed 1T4rans3fer2 i3s c3ool1!")))
+    println(wikiParseReader(new CharSequenceReader("3Chu2nk3ed 1T4rans3fer2 i3s c3ool1!")))
   }
 }
 
 class ChunkReader(length: Int, rdr: Reader[Char]) {
-  override def toString = length+"-"+rdr.drop(1).first
+  def content = rdr.source.subSequence(rdr.offset, rdr.offset + length)
+  override def toString = length+"-"+content
 }
 
 
