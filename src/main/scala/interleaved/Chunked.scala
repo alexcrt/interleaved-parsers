@@ -13,7 +13,7 @@ import scala.util.parsing.input.{Position, CharSequenceReader, Reader}
 import scala.collection.JavaConversions._
 
 
-object Interleaved extends RegexParsers {
+object Chunked extends RegexParsers {
 
   def digit: Parser[Int] = """\d+""".r map (x => x.toInt)
 
