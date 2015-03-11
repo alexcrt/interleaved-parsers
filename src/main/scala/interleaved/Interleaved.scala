@@ -23,12 +23,12 @@ object Interleaved extends RegexParsers {
     Success(new ChunkReader(length, self), self.drop(length))
   }
 
-  def wikiParseReader: Parser[List[ChunkReader]] = rep(digitAndContent)
+  def parseChunked: Parser[String] = rep(digitAndContent) map (x => x.foldLeft(new StringBuilder())((sb, chunk) => sb.append(chunk.content)).toString)
 
   def main(args: Array[String]) = {
     lines(get("testing_files/chunked")).collect(toList())
       .toList
-      .foreach(text => println(wikiParseReader(new CharSequenceReader(text))))
+      .foreach(text => println(parseChunked(new CharSequenceReader(text))))
   }
 }
 
