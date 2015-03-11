@@ -1,7 +1,10 @@
 package parsers
 
-import scala.util.parsing.combinator._
 import java.io.Reader
+
+import scala.util.parsing.combinator._
+
+
 
 /**
  * CSV Parser based on RFC4180
