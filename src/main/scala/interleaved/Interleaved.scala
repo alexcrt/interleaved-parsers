@@ -4,11 +4,13 @@ package interleaved
 import java.io.{File, FileReader}
 import java.nio.file.Paths.get
 import java.nio.file.Files.lines
-import java.util.stream.Collectors.joining
+import java.util.stream.Collectors.toList
 
 import scala.util.{Failure, Success}
 import scala.util.parsing.combinator.RegexParsers
 import scala.util.parsing.input.{Position, CharSequenceReader, Reader}
+
+import scala.collection.JavaConversions._
 
 
 object Interleaved extends RegexParsers {
@@ -21,14 +23,12 @@ object Interleaved extends RegexParsers {
     Success(new ChunkReader(length, self), self.drop(length))
   }
 
-  def wikiParseReader: Parser[List[ChunkReader]] = repsep(digitAndContent, "\r\n")
+  def wikiParseReader: Parser[List[ChunkReader]] = rep(digitAndContent)
 
   def main(args: Array[String]) = {
-    // println(wikiParseReader(new CharSequenceReader("3Sca2la")))
-    // println(wikiParseReader(new CharSequenceReader("3Chu2nk3ed 1T4rans3fer2 i3s c3ool1!")))
-    val text = lines(get("testing_files/chunkedTransferEncoding")).collect(joining)
-    println(text)
-    println(wikiParseReader(new CharSequenceReader(text)))
+    lines(get("testing_files/chunked")).collect(toList())
+      .toList
+      .foreach(text => println(wikiParseReader(new CharSequenceReader(text))))
   }
 }
 
