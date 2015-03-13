@@ -19,8 +19,8 @@ object Chunked extends RegexParsers {
 
   def digitAndContent: Parser[ChunkReader] = digit flatMap (x => content(x))
 
-  def content(length: Int): Parser[ChunkReader] = Parser { self =>
-    Success(new ChunkReader(length, self), self.drop(length))
+  def content(length: Int): Parser[ChunkReader] = Parser { rdr =>
+    Success(new ChunkReader(length, rdr), rdr.drop(length))
   }
 
   def parseChunked: Parser[String] = rep(digitAndContent) map (x => x.foldLeft(new StringBuilder())((sb, chunk) => sb.append(chunk.content)).toString)
