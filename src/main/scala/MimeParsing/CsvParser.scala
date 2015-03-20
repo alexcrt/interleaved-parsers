@@ -1,4 +1,4 @@
-package parsers
+package MimeParsing
 
 import java.io.Reader
 
@@ -9,7 +9,7 @@ import scala.util.parsing.combinator._
 /**
  * CSV Parser based on RFC4180
  */
-object CsvParser extends RegexParsers {
+trait CsvParser extends RegexParsers {
 
     override def skipWhitespace = false
     
@@ -17,11 +17,6 @@ object CsvParser extends RegexParsers {
     def TEXTDATA = "[^\",\r\n]".r
     def DQUOTE = "\""
     def DQUOTE2 = "\"\""
-    
-    def parse(input: Reader) = parseAll(file, input) match {
-        case Success(res, _) => res
-        case e => throw new RuntimeException(e.toString);
-    }
 
     def file: Parser[List[List[String]]] = repsep(record, CRLF) <~ opt(CRLF)
 

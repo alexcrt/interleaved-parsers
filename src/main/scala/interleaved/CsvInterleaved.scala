@@ -6,7 +6,7 @@ import java.nio.file.Paths.get
 import java.nio.file.Files.lines
 import java.util.stream.Collectors.toList
 
-import parsers.CsvParser
+import MimeParsing.CsvParser
 
 import scala.util.{Failure, Success}
 import scala.util.parsing.combinator.RegexParsers
@@ -16,7 +16,7 @@ import scala.collection.JavaConversions._
 
 
 object CsvInterleaved extends RegexParsers {
-
+  /*
   def parse(in: Reader[Char]) = Chunked.parseChunked(in) map (x => CsvParser.parse(new StringReader(x)))
 
 
@@ -25,6 +25,7 @@ object CsvInterleaved extends RegexParsers {
       .toList
       .foreach(text => println(parse(new CharSequenceReader(text))))
   }
+  */
 }
 
 
