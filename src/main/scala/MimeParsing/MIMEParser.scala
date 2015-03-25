@@ -2,8 +2,6 @@ package MimeParsing
 
 import java.io.Reader
 
-import MimeParsing.JsonParser
-
 import scala.util.parsing.combinator.RegexParsers
 
 
@@ -27,16 +25,15 @@ object MIMEParser extends RegexParsers with JsonParser with TextParser {
 
   def header: Parser[MimeHeader] = MimeVersion ~> versionNumber <~ CRLF map (v => new MimeHeader(v))
 
-  def content: Parser[Any] = ContentType ~> ((contentType <~ "/") ~ subType) <~ ";" <~ CRLF flatMap (t => getParser((t._1, t._2)))
+  def content: Parser[Any] = ContentType ~> ((contentType <~ "/") ~ subType) <~";" flatMap (t => getParser((t._1, t._2)))
 
   def contentType = "application" | "audio" | "image" | "message" | "multipart" | "text" | "video"
-  def subType = token | ""
-  def token = "json" | "plain"
+  def subType = "json" | "plain" | "mixed"
 
   def getParser(t: (String, String)): Parser[Any] = t match {
     case ("application", subtype) => throw new Exception ("Not implemented yet")
 
-    case ("text", subtype) => getTextParser(subtype)
+    case ("text", subtype) => getTextParser(subtype) <~ CRLF
 
     case ("audio", _) => throw new Exception ("Not implemented yet")
 
@@ -44,7 +41,10 @@ object MIMEParser extends RegexParsers with JsonParser with TextParser {
 
     case ("message", _) => throw new Exception ("Not implemented yet")
 
-    case ("multipart", _) => throw new Exception ("Not implemented yet")
+    case ("multipart", subtype) => MultipartOptions.valueOf(subtype) match {
+      case Some(option) => getMultipartParser(option)
+      case None => throw new Exception ("Only mixed and digest are supported for multipart")
+    }
 
     case ("video", _) => throw new Exception ("Not implemented yet")
 
@@ -57,10 +57,22 @@ object MIMEParser extends RegexParsers with JsonParser with TextParser {
     case _ => throw new Exception("Cannot parse such text subtype: " + subtype)
   }
 
+  def getMultipartParser(value: MultipartOptions.Value): Parser[Any] =  value match {
+    case MultipartOptions.Mixed => "boundary=" ~> """\w+""".r <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content, "--" ~> x))
+    case MultipartOptions.Digest => throw new Exception("Digest not implemented yet")
+  }
 
   /**
    * Classes to have a typed parser
    */
+  object MultipartOptions extends Enumeration {
+    type MultipartOptions = Value
+    val Mixed = Value("mixed")
+    val Digest = Value("digest")
+
+    def valueOf(name: String) = values.find(_.toString == name) 
+  }
+
   final class Mime(header : MimeHeader, content: Any) {
     override def toString = List(header.toString, content).mkString("\n")
   }

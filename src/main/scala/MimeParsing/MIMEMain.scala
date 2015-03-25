@@ -9,7 +9,8 @@ import scala.io.Source
  */
 object MIMEMain {
   def main(args: Array[String]): Unit = {
-    List("testing_files/mime_messages/text", "testing_files/mime_messages/json")
+    List("testing_files/mime_messages/text", "testing_files/mime_messages/json", "testing_files/mime_messages/boundary")
+      .drop(2)
       .map(Source.fromFile(_).bufferedReader)
       .map(MIMEParser.parse)
       .foreach(res => println(res+"\n==================\n"))
