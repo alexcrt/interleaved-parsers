@@ -4,7 +4,7 @@ import java.io.Reader
 
 import scala.util.parsing.combinator._
 
-trait JsonParser extends JavaTokenParsers {
+object JsonParser extends JavaTokenParsers {
 
     def parse(input: Reader) = parseAll(root, input) match {
         case Success(res, _) => res

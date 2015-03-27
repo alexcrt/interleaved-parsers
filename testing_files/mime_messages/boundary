@@ -1,11 +1,12 @@
 MIME-Version:1.0
-Content-Type:multipart/mixed;boundary=frontier
+Content-Type:multipart/mixed;boundary=ok
 --frontier
 Content-Type:text/json;
 {"key":"value"}
 --frontier
-Content-Type:application/octet-stream;
-Content-Transfer-Encoding: base64
-PGh0bWw+CiAgPGhlYWQ+CiAgPC9oZWFkPgogIDxib2R5PgogICAgPHA+VGhpcyBpcyB0aGUg
-Ym9keSBvZiB0aGUgbWVzc2FnZS48L3A+CiAgPC9ib2R5Pgo8L2h0bWw+Cg==
+Content-Type:text/json;
+{"key1":"value1"}
+--frontier
+Content-Type:text/json;
+["Scala","Parser","Combinator","Is","Cool"]
 --frontier

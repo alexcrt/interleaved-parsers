@@ -4,19 +4,18 @@ import java.io.Reader
 
 import scala.util.parsing.combinator.RegexParsers
 
-
-object MIMEParser extends RegexParsers with JsonParser with TextParser {
+object MIMEParser extends RegexParsers {
 
   override def skipWhitespace = false
 
   val MimeVersion = "MIME-Version:"
   val ContentType = "Content-Type:"
 
-  override def CRLF = "\r\n" | "\n"
+  def CRLF = "\r\n" | "\n"
 
   def versionNumber = """\d+.\d+""".r
 
-  override def parse(input: Reader) = parseAll(all, input) match {
+  def parse(input: Reader) = parseAll(all, input) match {
     case Success(res, _) => res
     case e => throw new RuntimeException(e.toString);
   }
@@ -33,7 +32,7 @@ object MIMEParser extends RegexParsers with JsonParser with TextParser {
   def getParser(t: (String, String)): Parser[Any] = t match {
     case ("application", subtype) => throw new Exception ("Not implemented yet")
 
-    case ("text", subtype) => getTextParser(subtype) <~ CRLF
+    case ("text", subtype) => CRLF ~> getTextParser(subtype) <~ CRLF
 
     case ("audio", _) => throw new Exception ("Not implemented yet")
 
@@ -52,13 +51,13 @@ object MIMEParser extends RegexParsers with JsonParser with TextParser {
   }
 
   def getTextParser(subtype: String): Parser[Any] = subtype match {
-    case("json") => root
-    case ("plain") => text
+    case("json") => JsonParser.root.asInstanceOf[Parser[Any]]
+    case ("plain") => TextParser.root.asInstanceOf[Parser[Any]]
     case _ => throw new Exception("Cannot parse such text subtype: " + subtype)
   }
 
   def getMultipartParser(value: MultipartOptions.Value): Parser[Any] =  value match {
-    case MultipartOptions.Mixed => "boundary=" ~> """\w+""".r <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content, "--" ~> x))
+    case MultipartOptions.Mixed => "boundary=" ~> """\w+""".r <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content, "--" ~> x <~ CRLF) <~ ("--" ~> x <~ CRLF))
     case MultipartOptions.Digest => throw new Exception("Digest not implemented yet")
   }
 
