@@ -20,16 +20,16 @@ object MIMEParser extends RegexParsers {
     case e => throw new RuntimeException(e.toString);
   }
 
-  def all: Parser[Mime] = header ~ content map (t => new Mime(t._1, t._2))
+  def all: Parser[Mime] = header ~ content() map (t => new Mime(t._1, t._2))
 
   def header: Parser[MimeHeader] = MimeVersion ~> versionNumber <~ CRLF map (v => new MimeHeader(v))
 
-  def content: Parser[Any] = ContentType ~> ((contentType <~ "/") ~ subType) <~";" flatMap (t => getParser((t._1, t._2)))
+  def content(multipart: Boolean = false): Parser[Any] = ContentType ~> ((contentType <~ "/") ~ subType) <~";" flatMap (t => getParser((t._1, t._2), multipart))
 
   def contentType = "application" | "audio" | "image" | "message" | "multipart" | "text" | "video"
   def subType = "json" | "plain" | "mixed"
 
-  def getParser(t: (String, String)): Parser[Any] = t match {
+  def getParser(t: (String, String), multipart: Boolean): Parser[Any] = t match {
     case ("application", subtype) => throw new Exception ("Not implemented yet")
 
     case ("text", subtype) => CRLF ~> getTextParser(subtype) <~ CRLF
@@ -40,10 +40,14 @@ object MIMEParser extends RegexParsers {
 
     case ("message", _) => throw new Exception ("Not implemented yet")
 
-    case ("multipart", subtype) => MultipartOptions.valueOf(subtype) match {
-      case Some(option) => getMultipartParser(option)
-      case None => throw new Exception ("Only mixed and digest are supported for multipart")
-    }
+    case ("multipart", subtype) =>
+      if(multipart)
+        throw new Exception ("Multipart already parsed")
+      else
+        MultipartOptions.valueOf(subtype) match {
+          case Some(option) => getMultipartParser(option)
+          case None => throw new Exception ("Only mixed and digest are supported for multipart")
+      }
 
     case ("video", _) => throw new Exception ("Not implemented yet")
 
@@ -52,12 +56,12 @@ object MIMEParser extends RegexParsers {
 
   def getTextParser(subtype: String): Parser[Any] = subtype match {
     case("json") => JsonParser.root.asInstanceOf[Parser[Any]]
-    case ("plain") => TextParser.root.asInstanceOf[Parser[Any]]
+    case ("plain") => TextParser.root().asInstanceOf[Parser[Any]]
     case _ => throw new Exception("Cannot parse such text subtype: " + subtype)
   }
 
   def getMultipartParser(value: MultipartOptions.Value): Parser[Any] =  value match {
-    case MultipartOptions.Mixed => "boundary=" ~> """\w+""".r <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content, "--" ~> x <~ CRLF) <~ ("--" ~> x <~ CRLF))
+    case MultipartOptions.Mixed => "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content(true), "--" ~> x <~ CRLF) <~ ("--" ~> x <~ CRLF))
     case MultipartOptions.Digest => throw new Exception("Digest not implemented yet")
   }
 

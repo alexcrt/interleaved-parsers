@@ -9,6 +9,6 @@ object TextParser extends RegexParsers {
     def CRLF = "\r\n" | "\n"
     def TEXTDATA = ".*".r
 
-    def root: Parser[List[String]] = repsep(TEXTDATA, CRLF)
+    def root(boundary: Option[String] = None): Parser[List[String]] = repsep(TEXTDATA, CRLF)
   
 }
