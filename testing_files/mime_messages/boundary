@@ -7,6 +7,10 @@ Content-Type:text/json;
 Content-Type:text/json;
 {"key1":"value1"}
 --frontier
+Content-Type:text/plain;
+Parsing plain text
+TakeUntil parser rocks!
+--frontier
 Content-Type:text/json;
-["Scala","Parser","Combinator","Is","Cool"]
+{"array":["Scala", "Parser Combinators"]}
 --frontier
