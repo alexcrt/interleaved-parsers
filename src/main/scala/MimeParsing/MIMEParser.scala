@@ -61,7 +61,7 @@ object MIMEParser extends RegexParsers {
   }
 
   def getMultipartParser(value: MultipartOptions.Value): Parser[Any] =  value match {
-    case MultipartOptions.Mixed => "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content(true, Some("--"+x)), "--" ~> x <~ CRLF) <~ "--" <~ x)
+    case MultipartOptions.Mixed => "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content(true, Some("--"+x)), "--" ~> x <~ CRLF) <~ "--" <~ x <~ opt(CRLF))
     case MultipartOptions.Digest => throw new Exception("Digest not implemented yet")
   }
 
