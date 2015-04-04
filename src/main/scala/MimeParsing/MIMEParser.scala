@@ -27,7 +27,7 @@ object MIMEParser extends RegexParsers {
   def content(multipart: Boolean = false, boundary: Option[String] = None): Parser[Any] = ContentType ~> ((contentType <~ "/") ~ subType) <~";" flatMap (t => getParser((t._1, t._2), multipart, boundary))
 
   def contentType = "application" | "audio" | "image" | "message" | "multipart" | "text" | "video"
-  def subType = "json" | "plain" | "mixed"
+  def subType = "json" | "plain" | "csv" | "mixed"
 
   def getParser(t: (String, String), multipart: Boolean, boundary: Option[String] = None): Parser[Any] = t match {
     case ("application", subtype) => throw new Exception ("Not implemented yet")
@@ -55,8 +55,9 @@ object MIMEParser extends RegexParsers {
   }
 
   def getTextParser(subtype: String, boundary: Option[String] = None): Parser[Any] = subtype match {
-    case("json") => JsonParser.root.asInstanceOf[Parser[Any]]
+    case ("json") => JsonParser.root.asInstanceOf[Parser[Any]]
     case ("plain") => TextParser.root(boundary).asInstanceOf[Parser[Any]]
+    case ("csv") => CsvParser.file(boundary).asInstanceOf[Parser[Any]]
     case _ => throw new Exception("Cannot parse such text subtype: " + subtype)
   }
 

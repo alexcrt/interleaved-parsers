@@ -14,3 +14,8 @@ TakeUntil parser rocks!
 Content-Type:text/json;
 {"array":["Scala", "Parser Combinators"]}
 --frontier
+Content-Type:text/csv;
+Year,Make,Model
+1997,Ford,E350
+2000,Mercury,Cougar
+--frontier
