@@ -10,6 +10,7 @@ object MIMEParser extends RegexParsers {
 
   val MimeVersion = "MIME-Version:"
   val ContentType = "Content-Type:"
+  val ContentTransferEncoding = "Content-transfer-encoding:"
 
   def CRLF = "\r\n" | "\n"
 
@@ -24,13 +25,24 @@ object MIMEParser extends RegexParsers {
 
   def header: Parser[MimeHeader] = MimeVersion ~> versionNumber <~ CRLF map (v => new MimeHeader(v))
 
-  def content(multipart: Boolean = false, boundary: Option[String] = None): Parser[Any] = ContentType ~> ((contentType <~ "/") ~ subType) <~";" flatMap (t => getParser((t._1, t._2), multipart, boundary))
+  def content(multipart: Boolean = false, boundary: Option[String] = None): Parser[Any] =
+    ContentType ~> ((contentType <~ "/") ~ subType) <~ ";" flatMap (t => getParser((t._1, t._2), multipart, boundary))
 
   def contentType = "application" | "audio" | "image" | "message" | "multipart" | "text" | "video"
-  def subType = "json" | "plain" | "csv" | "mixed"
+
+  def subType = "json" | "plain" | "csv" | "mixed" | "octet-stream"
+
+  def contentTransferEncoding = "base64"
 
   def getParser(t: (String, String), multipart: Boolean, boundary: Option[String] = None): Parser[Any] = t match {
-    case ("application", subtype) => throw new Exception ("Not implemented yet")
+
+    case ("application", subtype) => subtype match {
+      case "octet-stream" => CRLF ~> ContentTransferEncoding ~> contentTransferEncoding <~ CRLF flatMap {
+        case "base64" => Base64Parser.root(boundary).asInstanceOf[Parser[Any]]
+        case _ => throw new Exception("Not implemented yet")
+      }
+      case _ => throw new Exception("Not implemented yet")
+    }
 
     case ("text", subtype) => CRLF ~> getTextParser(subtype, boundary) <~ opt(CRLF)
 
@@ -78,7 +90,7 @@ object MIMEParser extends RegexParsers {
   }
 
   final class Mime(header : MimeHeader, content: Any) {
-    override def toString = List(header.toString, content).mkString("\n")
+    override def toString = List(header, content).mkString("\n")
   }
 
   final class MimeHeader(versionNumber : String) {
