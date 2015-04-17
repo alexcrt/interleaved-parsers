@@ -6,11 +6,11 @@ import scala.util.parsing.combinator.RegexParsers
 
 object MIMEParser extends RegexParsers {
 
-  override def skipWhitespace = false
+  override protected val whiteSpace = """[ ]+""".r
 
-  val MimeVersion = "MIME-Version:"
-  val ContentType = "Content-Type:"
-  val ContentTransferEncoding = "Content-transfer-encoding:"
+  def mimeVersionValue = "MIME-Version" ~> ":"
+  def contentTypeValue = "Content-Type" ~> ":"
+  def contentTransferEncodingValue = "Content-transfer-encoding" ~> ":"
 
   def CRLF = "\r\n" | "\n"
 
@@ -23,10 +23,10 @@ object MIMEParser extends RegexParsers {
 
   def all: Parser[Mime] = header ~ content() map (t => new Mime(t._1, t._2))
 
-  def header: Parser[MimeHeader] = MimeVersion ~> versionNumber <~ CRLF map (v => new MimeHeader(v))
+  def header: Parser[MimeHeader] = mimeVersionValue ~> versionNumber <~ CRLF map (v => new MimeHeader(v))
 
   def content(multipart: Boolean = false, boundary: Option[String] = None): Parser[Any] =
-    ContentType ~> ((contentType <~ "/") ~ subType) <~ ";" flatMap (t => getParser((t._1, t._2), multipart, boundary))
+    contentTypeValue ~> ((contentType <~ "/") ~ subType) <~ ";" flatMap (t => getParser((t._1, t._2), multipart, boundary))
 
   def contentType = "application" | "audio" | "image" | "message" | "multipart" | "text" | "video"
 
@@ -37,7 +37,7 @@ object MIMEParser extends RegexParsers {
   def getParser(t: (String, String), multipart: Boolean, boundary: Option[String] = None): Parser[Any] = t match {
 
     case ("application", subtype) => subtype match {
-      case "octet-stream" => CRLF ~> ContentTransferEncoding ~> contentTransferEncoding <~ CRLF flatMap {
+      case "octet-stream" => CRLF ~> contentTransferEncodingValue ~> contentTransferEncoding <~ CRLF flatMap {
         case "base64" => Base64Parser.root(boundary).asInstanceOf[Parser[Any]]
         case _ => throw new Exception("Not implemented yet")
       }
@@ -94,6 +94,6 @@ object MIMEParser extends RegexParsers {
   }
 
   final class MimeHeader(versionNumber : String) {
-    override def toString = MimeVersion + versionNumber
+    override def toString = "Mime-Version:" + versionNumber
   }
 }
