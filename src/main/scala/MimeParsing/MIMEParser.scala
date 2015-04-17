@@ -13,6 +13,7 @@ object MIMEParser extends RegexParsers {
   def contentTransferEncodingValue = "Content-transfer-encoding" ~> ":"
 
   def CRLF = "\r\n" | "\n"
+  def CRLFMore = rep1(CRLF)
 
   def versionNumber = """\d+.\d+""".r
 
@@ -23,7 +24,7 @@ object MIMEParser extends RegexParsers {
 
   def all: Parser[Mime] = header ~ content() map (t => new Mime(t._1, t._2))
 
-  def header: Parser[MimeHeader] = mimeVersionValue ~> versionNumber <~ CRLF map (v => new MimeHeader(v))
+  def header: Parser[MimeHeader] = mimeVersionValue ~> versionNumber <~ CRLFMore map (v => new MimeHeader(v))
 
   def content(multipart: Boolean = false, boundary: Option[String] = None): Parser[Any] =
     contentTypeValue ~> ((contentType <~ "/") ~ subType) <~ ";" flatMap (t => getParser((t._1, t._2), multipart, boundary))
@@ -37,14 +38,14 @@ object MIMEParser extends RegexParsers {
   def getParser(t: (String, String), multipart: Boolean, boundary: Option[String] = None): Parser[Any] = t match {
 
     case ("application", subtype) => subtype match {
-      case "octet-stream" => CRLF ~> contentTransferEncodingValue ~> contentTransferEncoding <~ CRLF flatMap {
+      case "octet-stream" => CRLFMore ~> contentTransferEncodingValue ~> contentTransferEncoding <~ CRLFMore flatMap {
         case "base64" => Base64Parser.root(boundary).asInstanceOf[Parser[Any]]
         case _ => throw new Exception("Not implemented yet")
       }
       case _ => throw new Exception("Not implemented yet")
     }
 
-    case ("text", subtype) => CRLF ~> getTextParser(subtype, boundary) <~ opt(CRLF)
+    case ("text", subtype) => CRLFMore ~> getTextParser(subtype, boundary) <~ opt(CRLFMore)
 
     case ("audio", _) => throw new Exception ("Not implemented yet")
 
@@ -74,7 +75,7 @@ object MIMEParser extends RegexParsers {
   }
 
   def getMultipartParser(value: MultipartOptions.Value): Parser[Any] =  value match {
-    case MultipartOptions.Mixed => "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLF flatMap (x => "--" ~> x ~> CRLF ~> repsep(content(true, Some("--"+x)), "--" ~> x <~ CRLF) <~ "--" <~ x <~ opt(CRLF))
+    case MultipartOptions.Mixed => "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLFMore flatMap (x => "--" ~> x ~> CRLFMore ~> repsep(content(true, Some("--"+x)), "--" ~> x <~ CRLFMore) <~ "--" <~ x <~ opt(CRLFMore))
     case MultipartOptions.Digest => throw new Exception("Digest not implemented yet")
   }
 

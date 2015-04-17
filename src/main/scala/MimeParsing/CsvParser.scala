@@ -21,7 +21,7 @@ object CsvParser extends RegexParsers {
     def takeUntil(condition: Parser[String], parser: Parser[List[String]]): Parser[List[List[String]]] = rep(not(condition) ~> parser <~ CRLF)
 
     def file(boundary: Option[String] = None): Parser[List[List[String]]] = boundary match {
-        case Some(bound) => takeUntil(bound, record)
+        case Some(bound) => takeUntil(rep(CRLF) ~> bound, record)
         case None => repsep(record, CRLF) <~ opt(CRLF)
     }
 

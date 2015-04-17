@@ -1,26 +1,40 @@
 MIME-Version : 1.0
 Content-Type : multipart/mixed; boundary="frontier"
+
+
 --frontier
 Content-Type : text/json;
 {"key":"value"}
+
+
 --frontier
 Content-Type : text/json;
 {"key1":"value1"}
+
+
 --frontier
 Content-Type : text/plain;
 Parsing plain text
 TakeUntil parser rocks!
+
+
 --frontier
 Content-Type : application/octet-stream;
 Content-transfer-encoding : base64
 PGh0bWw+CiAgPGhlYWQ+CiAgPC9oZWFkPgogIDxib2R5PgogICAgPHA+VGhpcyBpcyB0aGUg
 Ym9keSBvZiB0aGUgbWVzc2FnZS48L3A+CiAgPC9ib2R5Pgo8L2h0bWw+Cg==
+
+
 --frontier
 Content-Type : text/json;
 {"array":["Scala", "Parser Combinators"]}
+
+
 --frontier
 Content-Type : text/csv;
 Year,Make,Model
 1997,Ford,E350
 2000,Mercury,Cougar
+
+
 --frontier
