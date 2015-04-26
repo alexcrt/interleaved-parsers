@@ -15,7 +15,7 @@ trait MyRegexParsers extends RegexParsers {
 
       while (consumed < s.length && s.charAt(consumed) == rdr.first) {
         rdr = rdr.rest
-        consumed += 1;
+        consumed += 1
       }
 
       if (consumed == s.length) {
