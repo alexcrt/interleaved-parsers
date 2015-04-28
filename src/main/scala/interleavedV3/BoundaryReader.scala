@@ -8,18 +8,17 @@ import scala.util.parsing.input.{OffsetPosition, Position, Reader}
  */
 abstract class BoundaryReader(length: Int, reader: Reader[Char]) extends Reader[Char]
 
-object NumberParser extends MyRegexParsers {
+object NumberParser extends RegexParsers {
 
-  def CRLF = "\n" | "\r\n"
+  override def skipWhitespace = false
 
-  def digit: Parser[String] = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-  def number: Parser[Int] = CRLF ~> rep1(digit) <~ CRLF map (x => x.mkString.toInt)
+  def CRLF = "\n"
+  def number: Parser[Int] = CRLF ~>  """\d+""".r <~ CRLF map (x => x.toInt)
 
   def root(reader: Reader[Char]) = parse(number, reader) match {
     case Success(res, rdr) => (res, rdr)
     case e => throw new RuntimeException(e.toString)
   }
-
 }
 
 case class MutableBoundaryReader(length: Int, reader: Reader[Char]) extends BoundaryReader (length, reader) {
