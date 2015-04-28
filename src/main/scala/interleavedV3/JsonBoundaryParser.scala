@@ -4,7 +4,7 @@ import java.io.Reader
 
 import scala.util.parsing.combinator._
 
-object JsonBoundaryParser extends MyRegexParsers with JavaTokenParsers {
+object JsonBoundaryParser extends MyRegexParsers {
 
     def parse(input: Reader) = parseAll(root, input) match {
         case Success(res, _) => res

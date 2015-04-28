@@ -7,7 +7,17 @@ import scala.util.parsing.input.{OffsetPosition, Position, Reader}
  */
 abstract class BoundaryReader(length: Int, reader: Reader[Char]) extends Reader[Char]
 
+object NumberParser extends MyRegexParsers {
+
+  def CRLF = "\n" | "\r\n"
+
+  def digit: Parser[String] = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+  def number: Parser[(Int, Int)] = CRLF ~> rep1(digit) <~ CRLF map (x => (x.length + 2, x.mkString.toInt))
+
+}
+
 case class MutableBoundaryReader(length: Int, reader: Reader[Char]) extends BoundaryReader (length, reader) {
+
 
   var len = length
   var rdr = reader
@@ -20,8 +30,9 @@ case class MutableBoundaryReader(length: Int, reader: Reader[Char]) extends Boun
       if(atEnd) {
         throw new NoSuchElementException()
       } else {
-        len = rdr.first.asDigit
-        rdr = rdr.drop(1)
+        val t = NumberParser.number(rdr).get
+        rdr = rdr.drop(t._1)
+        len = t._2
         return rdr.first
       }
     }

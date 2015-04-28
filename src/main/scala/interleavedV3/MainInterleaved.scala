@@ -8,13 +8,13 @@ import scala.util.parsing.input.CharSequenceReader
 object MainInterleaved {
 
   def main(args: Array[String]) = {
-    val res = BoundaryTextParser.parseBonjour(new MutableBoundaryReader(new CharSequenceReader("3bon4jour")))
+    val res = BoundaryTextParser.parseBonjour(new MutableBoundaryReader(new CharSequenceReader("\n3\nbon\n4\njour0")))
     println(res)
 
     val jsonRes = JsonBoundaryParser.root(new CharSequenceReader("{\"name\":\"value\"}"))
     println(jsonRes)
 
-    val jsonResBound = JsonBoundaryParser.root(new MutableBoundaryReader(new CharSequenceReader("2{\"4name2\":1\"7value\"}")))
+    val jsonResBound = JsonBoundaryParser.root(new MutableBoundaryReader(new CharSequenceReader("\n2\n{\"\n4\nname\n2\n\":\n1\n\"\n7\nvalue\"}\n0")))
     println(jsonResBound)
   }
 
