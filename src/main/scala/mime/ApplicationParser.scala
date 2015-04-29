@@ -1,8 +1,8 @@
-package MimeParsing
+package mime
 
 import java.io.Reader
 
-import MimeParsing.MIMEParser._
+import mime.MIMEParser._
 
 import scala.util.parsing.combinator.RegexParsers
 

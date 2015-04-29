@@ -1,4 +1,4 @@
-package MimeParsing
+package mime
 
 import java.io.{FileReader, File, StringReader}
 
