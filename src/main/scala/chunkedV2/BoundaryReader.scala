@@ -3,10 +3,12 @@ package chunkedV2
 import scala.util.parsing.combinator.RegexParsers
 import scala.util.parsing.input.{OffsetPosition, Position, Reader}
 
+import NumberParser.Parser
+import NumberParser.Success
+
 /**
  * Created by alex on 24.04.15.
  */
-abstract class BoundaryReader(length: Parser[Int], reader: Reader[Char]) extends Reader[Char]
 
 object NumberParser extends RegexParsers {
 
@@ -14,29 +16,25 @@ object NumberParser extends RegexParsers {
 
   def CRLF = "\n"
   def number: Parser[Int] = CRLF ~>  """\d+""".r <~ CRLF map (x => x.toInt)
-
-  def root(reader: Reader[Char]) = parse(number, reader) match {
-    case Success(res, rdr) => (res, rdr)
-    case e => throw new RuntimeException(e.toString)
-  }
 }
 
-case class MutableBoundaryReader(length: Parser[Int], reader: Reader[Char]) extends BoundaryReader (length, reader) {
+case class MutableBoundaryReader private (length: Int, parseLen: Parser[Int], reader: Reader[Char]) extends Reader[Char] {
 
-  var len = length
+  var len = 0
   var rdr = reader
   var position = 0
 
-  def this(reader: Reader[Char]) = this(0, reader)
+  def this(parseLen: Parser[Int], reader: Reader[Char]) = this(0, parseLen, reader)
 
   override def first: Char = {
     if(len == 0) {
       if(atEnd) {
         throw new NoSuchElementException()
       } else {
-        val t = NumberParser.root(rdr)
-        len = t._1
-        rdr = t._2
+        parseLen(rdr) match {
+          case Success(le, rdrDropped) => len = le; rdr = rdrDropped
+          case e => throw new RuntimeException(e.toString)
+        }
         return rdr.first
       }
     }
@@ -44,6 +42,10 @@ case class MutableBoundaryReader(length: Parser[Int], reader: Reader[Char]) exte
   }
 
   override def drop(n : Int): Reader[Char] = {
+    len = len - n
+    if(len < 0) {
+      throw new IllegalStateException("Called dropped, now the length is less than 0")
+    }
     rdr = rdr.drop(n)
     return this
   }
