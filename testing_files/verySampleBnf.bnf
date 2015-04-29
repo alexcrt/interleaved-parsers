@@ -1,7 +1,0 @@
-<postal_address> ::= <name_part> <street_address> <zip_part>
-<name_part> ::= <personal_part> <last_name> <opt_suffix_part> | <personal_part> <name_part>
-<personal_part> ::= <first_name> | <initial> "."
-<street_address> ::= <house_num> <street_name> <opt_apt_num>
-<zip_part> ::= <town_name> "," <state_code> <ZIP_code> <EOL>
-<opt_suffix_part> ::= "Sr" | "Jr" | <roman_numeral> | ""
-<opt_apt_num> ::= <apt_num> | ""
