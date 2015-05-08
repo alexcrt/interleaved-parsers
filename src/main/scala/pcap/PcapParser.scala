@@ -1,18 +1,12 @@
 package pcap
 
 import java.io.Reader
-import java.sql.Timestamp
-import java.time.{ZoneOffset, LocalDateTime}
-
 import scala.util.parsing.combinator.RegexParsers
 import java.lang.Long
 import ByteOrder.ByteOrder
 import ByteOrder.Standard
 import ByteOrder.Reversed
 
-/**
- * For now assume that the data is in lowercase
- */
 trait PcapParser extends RegexParsers {
 
   def hexadecimalDigit = """[0-9a-fA-F]""".r
@@ -23,7 +17,7 @@ trait PcapParser extends RegexParsers {
   }
 
   def pcap: Parser[PcapFile] = pcapGlobalHeader flatMap {
-    case (order, header) => rep(pcapPacket(order)) map (l => new PcapFile(header, l))
+    case (order, header) => rep(pcapPacket(order, header.getNetworkPacketType)) map (l => new PcapFile(header, l))
   }
 
   /*
@@ -53,8 +47,8 @@ trait PcapParser extends RegexParsers {
   /*
   Packet parsers
    */
-  def pcapPacket(order: ByteOrder): Parser[PcapPacket] =
-    pcapPacketHeader(order) flatMap (header => pcapPacketData(order, header.getInclLen) map(data => new PcapPacket(header, data)))
+  def pcapPacket(order: ByteOrder, networkPacketType: NetworkPacketType): Parser[PcapPacket] =
+    pcapPacketHeader(order) flatMap (header => pcapPacketData(order, header.getInclLen, networkPacketType) map(data => new PcapPacket(header, data)))
   
   def pcapPacketHeader(order: ByteOrder): Parser[PcapPacketHeader] =
     readTimestamp(order) ~ readTimestampOffset(order) ~ readInclLen(order) ~ readOrigLen(order) map {case t1 ~ t2 ~ incl ~ orig => new PcapPacketHeader(t1, t2, incl, orig)}
@@ -67,15 +61,31 @@ trait PcapParser extends RegexParsers {
 
   def readOrigLen(order: ByteOrder) : Parser[Int] = readInt(order)
 
-  //actually the order does not matter, as the doc states
-  def pcapPacketData(order: ByteOrder, len: Int): Parser[PcapPacketData] = repN(len, readByte) flatMap (l => makePcapData(l.mkString))
+  //TODO: actually the order does not matter, as the doc states
+  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) flatMap (l => makePcapData(l.mkString, networkPacketType))
 
-  def makePcapData(data: String): Parser[PcapPacketData] =
-    linkLayer(data.substring(0, 28)) ~ ipHeader(data.substring(28, 68)) map (t => new PcapPacketData(t._1, t._2))
+  def makePcapData(data: String, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
+    case Ethernet => ethernetTrame(data) map (trame => new PcapPacketData(trame))
+    case _ => throw new UnsupportedOperationException("NetworkPacket "+networkPacketType+" not supported yet")
+  }
+
+  def ethernetTrame(data: String): Parser[NetworkPacket] =
+    macHeader(data) flatMap (h => payload(h.getEtherType, data.substring(28)) map (data => new EthernetFrame(h, data)))
+
+  def macHeader(data: String): Parser[MACHeader] =
+    macAddress(data.substring(0, 12)) ~ macAddress(data.substring(12, 24)) ~ etherType(data.substring(24, 28)) map {case src ~ dest ~ ethType => new MACHeader(src, dest, Integer.parseInt(ethType, 16))}
 
 
-  def linkLayer(layer: String): Parser[LinkLayer] = ???
-  def ipHeader(header: String): Parser[IpHeader] = ???
+  //TODO: real mac address parsing
+  def macAddress(mac: String): Parser[String] = "" ^^ (x => mac)
+
+  //TODO: return ethernet type
+  def etherType(typ: String): Parser[String] = "" ^^ (x => typ)
+
+  def payload(etherType: String, data: String): Parser[Payload] = etherType match {
+    case "IPv4" => IPv4Parser.root(data).asInstanceOf[Parser[Payload]]
+    case _ => throw new UnsupportedOperationException(etherType+ "not supported yet")
+  }
 
   /*
     Basic functions for reading the data

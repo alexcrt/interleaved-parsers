@@ -15,6 +15,7 @@ object MainInterleaved {
     val jsonRes = JsonBoundaryParser.root(new CharSequenceReader("{\"name\":\"value\"}"))
     println(jsonRes)
 
+    println("\n2\n{\"\n4\nname\n2\n\":\n1\n\"\n7\nvalue\"}\n0")
     val jsonResBound = JsonBoundaryParser.root(new MutableBoundaryReader(NumberParser.number, new CharSequenceReader("\n2\n{\"\n4\nname\n2\n\":\n1\n\"\n7\nvalue\"}\n0")))
     println(jsonResBound)
 

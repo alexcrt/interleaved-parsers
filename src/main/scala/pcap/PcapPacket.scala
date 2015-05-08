@@ -7,25 +7,54 @@ class PcapPacket(header: PcapPacketHeader, data: PcapPacketData) {
 }
 
 class PcapPacketHeader(timestamp: Int, timestampOffset: Int, inclLen: Int, origLen: Int) {
-  //assume UTC for now but it's given by the thisZone field in the global header
+  //TODO: assume UTC for now but it's given by the thisZone field in the global header
   val date = LocalDateTime.ofEpochSecond(timestamp, timestampOffset, ZoneOffset.UTC)
 
   def getInclLen = inclLen
 
-  override def toString = date.toString
+  override def toString = "Date of the packet: "+date+"\n"+"Number of bytes to read: "+inclLen
 }
 
-class PcapPacketData (linkLayer: LinkLayer, ipHeader: IpHeader){
-
-}
-class LinkLayer(srcMac: String, destMac: String, ethernetType: String) {
-
+class PcapPacketData (networkPacket: NetworkPacket){
+  override def toString = networkPacket.toString
 }
 
-abstract sealed class IpHeader
-class IPv4Header extends IpHeader {
-
+object NetworkPacketType {
+  val typeMap = Map(1 -> Ethernet)
 }
-class IPv6Header extends IpHeader {
+sealed abstract class NetworkPacketType
+object Ethernet extends NetworkPacketType {
+  val typeMap = Map(
+    0x0800 -> "IPv4",
+    0x86DD -> "IPv6",
+    0x0806 -> "ARP",
+    0x8035 -> "RARP",
+    0x809B -> "AppleTalk",
+    0x88CD -> "SERCOS III",
+    0x0600 -> "XNS",
+    0x8100 -> "VLAN")
 
+  val typeMapInversed = typeMap.map(_.swap)
+}
+
+sealed abstract class NetworkPacket
+
+case class EthernetFrame(header: MACHeader, payload: Payload) extends NetworkPacket {
+  override def toString = header.toString + "\nPayload: \n"+payload
+}
+
+class MACHeader(destAddr: String, srcAddr: String, etherType: Int) {
+
+  val stringEtherType = Ethernet.typeMap.getOrElse(etherType, throw new NoSuchElementException())
+
+  def getEtherType = stringEtherType
+
+  override def toString = "Dest MAC address: " + destAddr +
+    "\nSrc MAC address: " + srcAddr +
+    "\nEther type: 0x" + Integer.toHexString(etherType) + " - " + stringEtherType
+}
+
+sealed abstract class Payload (typ: Int, data: String)
+class IPv4Payload(data: String) extends Payload(Ethernet.typeMapInversed.get("IPv4").get, data: String) {
+  override def toString = data
 }
