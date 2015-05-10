@@ -40,11 +40,12 @@ object Ethernet extends NetworkPacketType {
 sealed abstract class NetworkPacket
 
 case class EthernetFrame(header: MACHeader, payload: Payload) extends NetworkPacket {
-  override def toString = header.toString + "\nPayload: \n"+payload
+  override def toString = header + "\nPayload: \n"+payload
 }
 
 class MACHeader(destAddr: String, srcAddr: String, etherType: Int) {
 
+  println(etherType)
   val stringEtherType = Ethernet.typeMap.getOrElse(etherType, throw new NoSuchElementException())
 
   def getEtherType = stringEtherType
@@ -54,7 +55,7 @@ class MACHeader(destAddr: String, srcAddr: String, etherType: Int) {
     "\nEther type: 0x" + Integer.toHexString(etherType) + " - " + stringEtherType
 }
 
-sealed abstract class Payload (typ: Int, data: String)
-class IPv4Payload(data: String) extends Payload(Ethernet.typeMapInversed.get("IPv4").get, data: String) {
-  override def toString = data
+sealed abstract class Payload (typ: Int)
+class IPv4Payload(version: Int, ihl: Int) extends Payload(Ethernet.typeMapInversed.get("IPv4").get) {
+  override def toString = List("Version "+version, "Internet Header Length "+ihl).mkString("\n")
 }

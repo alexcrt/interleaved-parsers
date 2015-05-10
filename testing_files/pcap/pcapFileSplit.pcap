@@ -11,8 +11,15 @@ e913 0200 //timestamp offset microseconds
 4a00 0000 //number of octet saved in file
 4a00 0000 //actual length of packet = 74 bytes
 /*Packet data*/
-0000 0000 0000 0000
-0000 0000 0800 4500 003c 65c3 4000 4006
+0000 0000 //dest mac addr
+0000 0000 //src mac addr
+0000 0000
+0800      //ether type (Ipv4 here)
+4500      //
+003c      //
+65c3      // IPv4 Header
+4000      //
+4006      //
 51ac c0a8 00fe c0a8 00fe db62 0cea ccd8
 bb4d 0000 0000 a002 8018 ba51 0000 0204
 400c 0402 080a 00f0 de8e 0000 0000 0103

@@ -4,6 +4,20 @@ import scala.util.parsing.combinator.RegexParsers
 
 object IPv4Parser extends RegexParsers {
 
-  def re = PcapP
-  def root(data: String): Parser[IPv4Payload] = "" ^^ (x => new IPv4Payload(data))
+  def hexadecimalDigit = """[0-9a-fA-F]""".r
+  def readHexadecimalDigit: Parser[String] = hexadecimalDigit
+
+  def readByte: Parser[String] = repN(2, readHexadecimalDigit) map (_.mkString)
+
+
+  def hexaToInt:Parser[Int] = readHexadecimalDigit map (x => Integer.parseInt(x, 16))
+
+  //32/8 - 2 => 32 bits/line; /8 because the data is in hexa; - 2 to substract the byte we just read
+  //TODO: remove + 26 * 4
+  def root: Parser[IPv4Payload] = ipVersion ~ ihl flatMap {
+    x => repN(32/8 * x._1 - 2 + 26*4, readHexadecimalDigit) map (l =>  new IPv4Payload(x._1, x._2))
+  }
+
+  def ipVersion = hexaToInt
+  def ihl = hexaToInt
 }
