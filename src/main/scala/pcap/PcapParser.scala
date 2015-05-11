@@ -17,7 +17,7 @@ trait PcapParser extends RegexParsers {
   }
 
   def pcap: Parser[PcapFile] = pcapGlobalHeader flatMap {
-    case (order, header) => rep(pcapPacket(order, header.getNetworkPacketType)) map (l => new PcapFile(header, l))
+    case (order, header) => repN(2, pcapPacket(order, header.getNetworkPacketType)) map (l => new PcapFile(header, l))
   }
 
   /*
@@ -49,11 +49,11 @@ trait PcapParser extends RegexParsers {
    */
   def pcapPacket(order: ByteOrder, networkPacketType: NetworkPacketType): Parser[PcapPacket] =
     pcapPacketHeader(order) flatMap (header => pcapPacketData(order, header.getInclLen, networkPacketType) map(data => new PcapPacket(header, data)))
-  
+
   def pcapPacketHeader(order: ByteOrder): Parser[PcapPacketHeader] =
     readTimestamp(order) ~ readTimestampOffset(order) ~ readInclLen(order) ~ readOrigLen(order) map {case t1 ~ t2 ~ incl ~ orig => new PcapPacketHeader(t1, t2, incl, orig)}
 
-  def readTimestamp(order: ByteOrder): Parser[Int] = readInt(order)
+  def readTimestamp(order: ByteOrder): Parser[Int] = readInt(order) map (x => {println(x); x})
 
   def readTimestampOffset(order: ByteOrder) : Parser[Int] = readInt(order)
 
@@ -65,10 +65,17 @@ trait PcapParser extends RegexParsers {
   def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) flatMap (l => makePcapData(l.mkString, networkPacketType))
 
   def makePcapData(data: String, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
-    case Ethernet => "" ^^ (x => new PcapPacketData(new EthernetFrame(null, null)))//ethernetTrame(data) map (trame => new PcapPacketData(trame))
+    case Ethernet => ethernetFrameParser(data) map (trame => new PcapPacketData(trame))
+      //"" ^^ (x => new PcapPacketData(new EthernetFrame(null, null)))
+    //ethernetTrame(data) map (trame => new PcapPacketData(trame))
     case _ => throw new UnsupportedOperationException("NetworkPacket "+networkPacketType+" not supported yet")
   }
 
+  def ethernetFrameParser(data: String): Parser[NetworkPacket] = new Parser[NetworkPacket] {
+    def apply(in: Input) = EthernetFrameParser.parse(data).asInstanceOf[ParseResult[NetworkPacket]]
+  }
+
+  /*
   def ethernetTrame(data: String): Parser[NetworkPacket] =
     macHeader(data) flatMap (h => payload(h.getEtherType, data.substring(28)) map (d => new EthernetFrame(h, d)))
 
@@ -85,7 +92,7 @@ trait PcapParser extends RegexParsers {
   def payload(etherType: String, data: String): Parser[Payload] = etherType match {
     case "IPv4" => IPv4Parser.root.asInstanceOf[Parser[Payload]]
     case _ => throw new UnsupportedOperationException(etherType+ "not supported yet")
-  }
+  }*/
 
   /*
     Basic functions for reading the data
