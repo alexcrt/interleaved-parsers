@@ -71,28 +71,10 @@ trait PcapParser extends RegexParsers {
     case _ => throw new UnsupportedOperationException("NetworkPacket "+networkPacketType+" not supported yet")
   }
 
+  //hack, actually ignore input but parse the String data
   def ethernetFrameParser(data: String): Parser[NetworkPacket] = new Parser[NetworkPacket] {
     def apply(in: Input) = EthernetFrameParser.parse(data).asInstanceOf[ParseResult[NetworkPacket]]
   }
-
-  /*
-  def ethernetTrame(data: String): Parser[NetworkPacket] =
-    macHeader(data) flatMap (h => payload(h.getEtherType, data.substring(28)) map (d => new EthernetFrame(h, d)))
-
-  def macHeader(data: String): Parser[MACHeader] =
-    macAddress(data.substring(0, 12)) ~ macAddress(data.substring(12, 24)) ~ etherType(data.substring(24, 28)) map {case src ~ dest ~ ethType => new MACHeader(src, dest, Integer.parseInt(ethType, 16))}
-
-
-  //TODO: real mac address parsing
-  def macAddress(mac: String): Parser[String] = "" ^^ (x => mac)
-
-  //TODO: return ethernet type
-  def etherType(typ: String): Parser[String] = "" ^^ (x => typ)
-
-  def payload(etherType: String, data: String): Parser[Payload] = etherType match {
-    case "IPv4" => IPv4Parser.root.asInstanceOf[Parser[Payload]]
-    case _ => throw new UnsupportedOperationException(etherType+ "not supported yet")
-  }*/
 
   /*
     Basic functions for reading the data
