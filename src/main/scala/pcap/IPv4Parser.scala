@@ -13,10 +13,9 @@ object IPv4Parser extends RegexParsers {
   def hexaToInt:Parser[Int] = readHexadecimalDigit map (x => Integer.parseInt(x, 16))
 
   //32/8 - 2 => 32 bits/line; /8 because the data is in hexa; - 2 to substract the byte we just read
-  //TODO: remove + 26 * 4
-  def root: Parser[IPv4Payload] = ipVersion ~ ihl flatMap {
-    x => repN(32/8 * x._1 - 2 + 26*4, readHexadecimalDigit) map (l =>  new IPv4Payload(x._1, x._2))
-  }
+  def root: Parser[IPv4Payload] = ipVersion ~ ihl flatMap (x => payload(x._1, x._2))
+
+  def payload(ipVersion: Int, ihl: Int) : Parser[IPv4Payload] = rep(readHexadecimalDigit) map (l => new IPv4Payload(ipVersion, ihl))
 
   def ipVersion = hexaToInt
   def ihl = hexaToInt

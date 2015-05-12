@@ -45,7 +45,6 @@ case class EthernetFrame(header: MACHeader, payload: Payload) extends NetworkPac
 
 class MACHeader(destAddr: String, srcAddr: String, etherType: Int) {
 
-  println(etherType)
   val stringEtherType = Ethernet.typeMap.getOrElse(etherType, throw new NoSuchElementException())
 
   def getEtherType = stringEtherType
