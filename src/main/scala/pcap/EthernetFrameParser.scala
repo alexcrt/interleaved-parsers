@@ -9,7 +9,7 @@ object EthernetFrameParser extends RegexParsers {
 
   def hexadecimalDigit = """[0-9a-fA-F]""".r
 
-  def parse(input: String): ParseResult[NetworkPacket] = parseAll(ethernetTrame, input)
+  def parse(input: String): ParseResult[NetworkPacket] = parse(ethernetTrame, input)
 
   def ethernetTrame: Parser[NetworkPacket] =
     macHeader flatMap (h => payload(h.getEtherType) map (d => new EthernetFrame(h, d)))

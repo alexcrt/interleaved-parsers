@@ -1,11 +1,11 @@
 package pcap
 
 import java.io.Reader
-import scala.util.parsing.combinator.RegexParsers
 import java.lang.Long
-import ByteOrder.ByteOrder
-import ByteOrder.Standard
-import ByteOrder.Reversed
+
+import pcap.ByteOrder.{ByteOrder, Reversed, Standard}
+
+import scala.util.parsing.combinator.RegexParsers
 
 trait PcapParser extends RegexParsers {
 
@@ -17,7 +17,7 @@ trait PcapParser extends RegexParsers {
   }
 
   def pcap: Parser[PcapFile] = pcapGlobalHeader flatMap {
-    case (order, header) => repN(2, pcapPacket(order, header.getNetworkPacketType)) map (l => new PcapFile(header, l))
+    case (order, header) => rep(pcapPacket(order, header.getNetworkPacketType)) map (l => new PcapFile(header, l))
   }
 
   /*
@@ -48,43 +48,43 @@ trait PcapParser extends RegexParsers {
   Packet parsers
    */
   def pcapPacket(order: ByteOrder, networkPacketType: NetworkPacketType): Parser[PcapPacket] =
-    pcapPacketHeader(order) flatMap (header => pcapPacketData(order, header.getInclLen, networkPacketType) map(data => new PcapPacket(header, data)))
+    pcapPacketHeader(order) flatMap (header => pcapPacketData(order, header.getInclLen, networkPacketType) map (data => new PcapPacket(header, data)))
 
   def pcapPacketHeader(order: ByteOrder): Parser[PcapPacketHeader] =
-    readTimestamp(order) ~ readTimestampOffset(order) ~ readInclLen(order) ~ readOrigLen(order) map {case t1 ~ t2 ~ incl ~ orig => new PcapPacketHeader(t1, t2, incl, orig)}
+    readTimestamp(order) ~ readTimestampOffset(order) ~ readInclLen(order) ~ readOrigLen(order) map { case t1 ~ t2 ~ incl ~ orig => new PcapPacketHeader(t1, t2, incl, orig) }
 
-  def readTimestamp(order: ByteOrder): Parser[Int] = readInt(order) map (x => {println(x); x})
+  def readTimestamp(order: ByteOrder): Parser[Int] = readInt(order)
 
-  def readTimestampOffset(order: ByteOrder) : Parser[Int] = readInt(order)
+  def readTimestampOffset(order: ByteOrder): Parser[Int] = readInt(order)
 
-  def readInclLen(order: ByteOrder) : Parser[Int] = readInt(order)
+  def readInclLen(order: ByteOrder): Parser[Int] = readInt(order)
 
-  def readOrigLen(order: ByteOrder) : Parser[Int] = readInt(order)
+  def readOrigLen(order: ByteOrder): Parser[Int] = readInt(order)
 
   //TODO: actually the order does not matter, as the doc states
-  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) flatMap (l => makePcapData(l.mkString, networkPacketType))
+  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) map (l => makePcapData(l.mkString, networkPacketType))
 
-  def makePcapData(data: String, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
-    case Ethernet => ethernetFrameParser(data) map (trame => new PcapPacketData(trame))
-      //"" ^^ (x => new PcapPacketData(new EthernetFrame(null, null)))
-    //ethernetTrame(data) map (trame => new PcapPacketData(trame))
-    case _ => throw new UnsupportedOperationException("NetworkPacket "+networkPacketType+" not supported yet")
+  def makePcapData(data: String, networkPacketType: NetworkPacketType): PcapPacketData = parseData(data, networkPacketType) match {
+    case Success(res, _) => new PcapPacketData(res)
+    case e => throw new RuntimeException(e.toString)
   }
 
-  //hack, actually ignore input but parse the String data
-  def ethernetFrameParser(data: String): Parser[NetworkPacket] = new Parser[NetworkPacket] {
-    def apply(in: Input) = EthernetFrameParser.parse(data).asInstanceOf[ParseResult[NetworkPacket]]
+  def parseData(data: String, networkPacketType: NetworkPacketType): ParseResult[NetworkPacket] = networkPacketType match {
+    case Ethernet => EthernetFrameParser.parse(data).asInstanceOf[ParseResult[NetworkPacket]]
+    case _ => throw new UnsupportedOperationException("NetworkPacket " + networkPacketType + " not supported yet")
   }
 
   /*
     Basic functions for reading the data
    */
   def readInt(order: ByteOrder): Parser[Int] =
-    readTwoBytes(order) ~ readTwoBytes(order) map (t => Integer.parseInt(t._2+t._1, 16))
+    readTwoBytes(order) ~ readTwoBytes(order) map (t => Integer.parseInt(t._2 + t._1, 16))
 
   def readTwoBytes(order: ByteOrder): Parser[String] = readByte ~ readByte map {
-    case b1 ~ b2 => if(order == ByteOrder.Reversed) b2+b1 else b1+b2
+    case b1 ~ b2 => if (order == ByteOrder.Reversed) b2 + b1 else b1 + b2
   }
+
   def readByte: Parser[String] = repN(2, hexadecimalDigit) map (_.mkString)
+
   def readHexadecimalDigit: Parser[String] = hexadecimalDigit
 }
