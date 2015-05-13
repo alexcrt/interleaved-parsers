@@ -54,7 +54,5 @@ class MACHeader(destAddr: String, srcAddr: String, etherType: Int) {
     "\nEther type: 0x" + Integer.toHexString(etherType) + " - " + stringEtherType
 }
 
-sealed abstract class Payload (typ: Int)
-class IPv4Payload(version: Int, ihl: Int) extends Payload(Ethernet.typeMapInversed.get("IPv4").get) {
-  override def toString = List("Version "+version, "Internet Header Length "+ihl).mkString("\n")
-}
+abstract class Payload (typ: Int)
+
