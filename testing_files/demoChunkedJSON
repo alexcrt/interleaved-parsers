@@ -1,0 +1,102 @@
+7
+{  "pro
+13
+duct": "Live 
+8
+JSON",  
+13
+"demo": true,
+16
+  "person": {   
+7
+ "id": 
+4
+1234
+4
+5,  
+6
+  "nam
+1
+e
+2
+":
+10
+ "John Doe
+13
+",    "phones
+3
+": 
+10
+{      "ho
+19
+me": "800-123-4567"
+17
+,      "mobile": 
+2
+"8
+2
+77
+3
+-12
+13
+3-1234"    },
+18
+    "email": [    
+2
+  
+3
+"jd
+18
+@example.com",    
+13
+  "jd@example
+16
+.org"    ],    "
+17
+registered": true
+18
+,    "emergencyCon
+10
+tacts": [ 
+18
+     {        "nam
+17
+e": "Jane Doe",  
+16
+      "phone": "
+3
+888
+19
+-555-1212",        
+13
+"relationship
+6
+": "sp
+1
+o
+3
+use
+14
+"      },     
+10
+ {        
+2
+"n
+19
+ame": "Justin Doe",
+11
+        "ph
+14
+one": "877-123
+2
+-1
+7
+212",  
+12
+      "relat
+1
+i
+19
+onship": "parent"  
+14
+    }    ]  }}
