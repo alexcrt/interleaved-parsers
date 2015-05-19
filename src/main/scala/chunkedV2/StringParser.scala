@@ -36,9 +36,13 @@ trait StringParser extends Parsers {
     case p1 ~ "." ~ p2 => p1.mkString + "." + p2.mkString
   }
 
-  def character: Parser[Char] = acceptIf(e => Character.isDefined(e) && e != '"')(e => "Expected character but was "+e)
+  def character: Parser[Char] = acceptIf(e => Character.isDefined(e))(e => "Expected character but was "+e)
 
-  def stringLiteral: Parser[String] = "\"" ~> rep1(character | digit) <~ "\"" map (l => l.mkString)
+  def nonQuoted: Parser[Char] = acceptIf(e => e != '"')(e => "Expected character that was not a quote but was "+e)
+
+  def quoted: Parser[Char] = "\\" ~> character
+
+  def stringLiteral: Parser[String] = "\"" ~> rep1(nonQuoted | quoted) <~ "\"" map (l => l.mkString)
 
   def handleWhiteSpace(in: Input): Input = {
     if (!skipWhitespace) {
