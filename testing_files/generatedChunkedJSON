@@ -1,0 +1,93 @@
+
+18
+{  "product": "Liv
+3
+e J
+18
+SON",  "demo": tru
+19
+e,  "person": {    
+13
+"id": 12345, 
+8
+   "name
+11
+": "John Do
+15
+e",    "phones"
+4
+: { 
+18
+     "home": "800-
+14
+123-4567",    
+1
+ 
+1
+ 
+10
+"mobile": 
+15
+"877-123-1234" 
+9
+   },    
+10
+"email": [
+12
+      "jd@ex
+17
+ample.com",      
+18
+"jd@example.org"  
+14
+  ],    "regis
+9
+tered": t
+17
+rue,    "emergenc
+13
+yContacts": [
+11
+      {    
+10
+    "name"
+3
+: "
+9
+Jane Doe"
+17
+,        "phone":
+5
+ "888
+1
+-
+18
+555-1212",        
+3
+"re
+17
+lationship": "spo
+1
+u
+18
+se"      },      {
+11
+        "na
+19
+me": "Justin Doe", 
+3
+   
+15
+    "phone": "8
+14
+77-123-1212", 
+10
+       "re
+11
+lationship"
+12
+: "parent"  
+13
+    }    ]  }
+1
+}

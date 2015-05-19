@@ -15,21 +15,21 @@ object JsonBoundaryParser extends MyRegexParsers {
                     "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" |
                     "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" |
                     "W" | "X" | "Y" | "Z" |
-                    "@" | "-" | "."
+                    "@" | "-" | "." | " "
 
 
-    def string = "\"" ~> rep1(character | digit) <~ "\"" map (l => l.mkString)
+    def string: Parser[String] = "\"" ~> rep1(character | digit) <~ "\"" map (l => l.mkString)
 
     def digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
     def number = rep1(digit) map (l => l.mkString)
 
-    def root: Parser[Any] = obj | arr | string | number ^^ (_.toInt)|
+    def root: Parser[Any] = obj | arr | string | number ^^ (_.toInt) |
                              "null" ^^ (x => null) | "true" ^^ (x => true) | "false" ^^ (x => false)
 
-    def obj: Parser[Map[String, Any]] = "{"~> repsep(member, ",") <~"}" ^^ (Map() ++ _)
+    def obj: Parser[Map[String, Any]] = "{" ~> w ~> repsep(member, w ~>","<~ w) <~ w <~"}" ^^ (Map() ++ _)
 
-    def arr: Parser[List[Any]] = "["~> repsep(root, ",") <~"]"
+    def arr: Parser[List[Any]] = "["~> w ~> repsep(root, w ~>","<~ w) <~ w <~"]"
 
-    def member: Parser[(String, Any)] = string ~ ":" ~ root ^^ {case name ~ ":" ~ value => (name, value)}
+    def member: Parser[(String, Any)] = (string ~ w ~ ":") ~ w ~ root map {case name ~ w1 ~ ":" ~ w2 ~ value => (name, value)}
 }

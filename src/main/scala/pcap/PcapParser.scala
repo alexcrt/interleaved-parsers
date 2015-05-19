@@ -3,6 +3,7 @@ package pcap
 import java.io.Reader
 import java.lang.Long
 
+import chunked.MutableBoundaryReader
 import pcap.ByteOrder.{ByteOrder, Reversed, Standard}
 
 import scala.util.parsing.combinator.RegexParsers
@@ -62,7 +63,19 @@ trait PcapParser extends RegexParsers {
   def readOrigLen(order: ByteOrder): Parser[Int] = readInt(order)
 
   //TODO: actually the order does not matter, as the doc states
-  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) map (l => makePcapData(l.mkString, networkPacketType))
+  //def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) map (l => makePcapData(l.mkString, networkPacketType))
+
+  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
+    case Ethernet =>  new Parser[PcapPacketData] {
+      def apply(in: Input) = EthernetFrameParser.ethernetTrame(new MutableBoundaryReader(len, in)).asInstanceOf[ParseResult[NetworkPacket]] match {
+        case Success(res, rdr) => Success(new PcapPacketData(res), rdr)
+        case e => throw new RuntimeException(e.toString)
+      }
+      //.ethernetTrame(new MutableBoundaryReader(len, null)).asInstanceOf[Parser[NetworkPacket]] map (r => new PcapPacketData(r))
+    }
+    case _ => throw new UnsupportedOperationException("NetworkPacket " + networkPacketType + " not supported yet")
+  }
+
 
   def makePcapData(data: String, networkPacketType: NetworkPacketType): PcapPacketData = parseData(data, networkPacketType) match {
     case Success(res, _) => new PcapPacketData(res)

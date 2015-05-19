@@ -11,6 +11,9 @@ trait MyRegexParsers extends RegexParsers {
 
   val whiteSpaces = Set('\t', '\r', '\n', '\f', ' ')
 
+  def w : Parser[String] = new Parser[String] {
+    def apply(in: Input) = Success("", handleWhiteSpace(in))
+  }
 
   def handleWhiteSpace(in: Input): Input = {
     if (!skipWhitespace) {
@@ -28,7 +31,7 @@ trait MyRegexParsers extends RegexParsers {
   override implicit def literal(s: String): Parser[String] = new Parser[String] {
     def apply(in: Input) = {
       var consumed = 0
-      var rdr = handleWhiteSpace(in)
+      var rdr = in //handleWhiteSpace(in)
 
       while (consumed < s.length && s.charAt(consumed) == rdr.first) {
         rdr = rdr.rest
