@@ -14,7 +14,7 @@ object PcapMain {
     val parser = new PcapParser{}
     val file = Source.fromFile("testing_files/pcap/pcapFile.pcap")
     val res = parser.parseAll(file.bufferedReader())
-    //println(res)
+    println(res)
     Files.write(Paths.get("result.txt"), res.toString.getBytes(StandardCharsets.UTF_8))
   }
 }

@@ -63,9 +63,9 @@ trait PcapParser extends RegexParsers {
   def readOrigLen(order: ByteOrder): Parser[Int] = readInt(order)
 
   //TODO: actually the order does not matter, as the doc states
-  //def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) map (l => makePcapData(l.mkString, networkPacketType))
+  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = repN(len, readByte) map (l => makePcapData(l.mkString, networkPacketType))
 
-  def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
+  /*def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
     case Ethernet =>  new Parser[PcapPacketData] {
       def apply(in: Input) = EthernetFrameParser.ethernetTrame(new MutableBoundaryReader(len, in)).asInstanceOf[ParseResult[NetworkPacket]] match {
         case Success(res, rdr) => Success(new PcapPacketData(res), rdr)
@@ -74,7 +74,7 @@ trait PcapParser extends RegexParsers {
       //.ethernetTrame(new MutableBoundaryReader(len, null)).asInstanceOf[Parser[NetworkPacket]] map (r => new PcapPacketData(r))
     }
     case _ => throw new UnsupportedOperationException("NetworkPacket " + networkPacketType + " not supported yet")
-  }
+  }*/
 
 
   def makePcapData(data: String, networkPacketType: NetworkPacketType): PcapPacketData = parseData(data, networkPacketType) match {
