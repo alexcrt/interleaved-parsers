@@ -4,6 +4,7 @@ import java.io.{File, FileReader}
 import java.nio.file.{Paths, Files}
 import java.util.stream.Collectors
 
+import scala.collection.immutable.PagedSeq
 import scala.io.Source
 import scala.util.parsing.input.{CharArrayReader, PagedSeqReader, CharSequenceReader}
 
@@ -29,7 +30,7 @@ object MainInterleaved {
     val res2 = JsonBoundaryParser.parse(new FileReader(new File("testing_files/demoJSON2")))
     println(res2)
 
-    val buf = new CharArrayReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).toArray)
+    val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).bufferedReader()))
 
     val res3 = JsonBoundaryParser.root(new MutableBoundaryReader(NumberParser.number, buf)).get
     println(res3)
