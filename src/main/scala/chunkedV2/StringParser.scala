@@ -60,7 +60,7 @@ trait StringParser extends Parsers {
   implicit def literal(s: String): Parser[String] = new Parser[String] {
     def apply(in: Input) = {
       var consumed = 0
-      var rdr = in //handleWhiteSpace(in)
+      var rdr = in
 
       while (consumed < s.length && s.charAt(consumed) == rdr.first) {
         rdr = rdr.rest
