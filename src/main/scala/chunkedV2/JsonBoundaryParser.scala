@@ -8,6 +8,7 @@ object JsonBoundaryParser extends StringParser {
         case Success(res, _) => res
         case e => throw new RuntimeException(e.toString);
     }
+    val x = "\"x\""
 
     def root: Parser[Any] = obj | arr | stringLiteral | integerNumber ^^ (_.toInt) |
                              "null" ^^ (x => null) | "true" ^^ (x => true) | "false" ^^ (x => false)

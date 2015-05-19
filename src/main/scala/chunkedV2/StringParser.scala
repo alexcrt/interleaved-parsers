@@ -42,7 +42,7 @@ trait StringParser extends Parsers {
 
   def quoted: Parser[Char] = "\\" ~> character
 
-  def stringLiteral: Parser[String] = "\"" ~> rep1(nonQuoted | quoted) <~ "\"" map (l => l.mkString)
+  def stringLiteral: Parser[String] = "\"" ~> rep1(quoted | nonQuoted) <~ "\"" map (l => l.mkString)
 
   def handleWhiteSpace(in: Input): Input = {
     if (!skipWhitespace) {
