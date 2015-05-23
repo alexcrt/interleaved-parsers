@@ -27,15 +27,15 @@ object MainInterleaved {
     val jsonResBound = JsonBoundaryParser.root(new MutableBoundaryReader(NumberParser.number, new CharSequenceReader(toParse)))
     println(jsonResBound)
 */
-    val res2 = JsonBoundaryParser.parse(new FileReader(new File("testing_files/demoJSON2")))
+    val res2 = JsonParser.parse(new FileReader(new File("testing_files/demoJSON2")))
     println(res2)
 
     val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).bufferedReader()))
 
-    val res3 = JsonBoundaryParser.root(new MutableBoundaryReader(NumberParser.number, buf)).get
+    val res3 = JsonParser.root(new MutableBoundaryReader(NumberParser.number, buf)).get
     println(res3)
 
-    println(res2.equals(res3))
+    println(res2)
 
   }
 

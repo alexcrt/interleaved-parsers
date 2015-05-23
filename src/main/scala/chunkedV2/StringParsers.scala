@@ -9,23 +9,29 @@ import scala.util.parsing.combinator.Parsers
 /**
  * Created by alex on 25.04.15.
  */
-trait StringParser extends Parsers {
+trait StringParsers extends Parsers {
 
   type Elem = Char
 
   protected val skipWhitespace = true
-  
+
   protected val whiteSpaces = Set('\t', '\r', '\n', '\f', ' ')
 
   def w : Parser[String] = new Parser[String] {
     def apply(in: Input) = Success("", handleWhiteSpace(in))
   }
 
-  def digit: Parser[Char] = acceptIf(e => Character.isDigit(e))(e => "Expected digit but was "+e)
+  def digit: Parser[Char] = acceptIf(_.isDigit)(e => "Expected digit but was "+e)
 
-  def integerNumber: Parser[String] = rep1(digit) map (l => l.mkString)
+def integerNumber: Parser[String] = opt("-") ~ rep1(digit) map {
+  case Some(minus) ~ nb => minus + nb.mkString
+  case None ~ nb => nb.mkString
+}
 
-  def decimalNumber:Parser[String] = decimalNumber0 | decimalNumber1
+  def decimalNumber:Parser[String] = opt("-") ~ (decimalNumber0 | decimalNumber1) map {
+    case Some(minus) ~ nb => minus + nb
+    case None ~ nb => nb
+  }
 
   def decimalNumber0: Parser[String] = rep1(digit) ~ opt("." ~ rep(digit)) map {
     case p1 ~ None => p1.mkString
