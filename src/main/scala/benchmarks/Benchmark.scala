@@ -34,6 +34,8 @@ object Benchmark extends PerformanceTest.Quickbenchmark {
     }
   }
 
+  //TODO: La je veux comparer par rapport a un input chunked
+
   /*performance of "Chunked" in {
     for (i <- 1 until 10) {
       measure method "root" in {
