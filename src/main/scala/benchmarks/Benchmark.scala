@@ -2,7 +2,7 @@ package benchmarks
 
 import java.io.{File, FileReader}
 
-import chunkedV2.{JsonParser, MutableBoundaryReader, NumberParser}
+import chunked.{JsonParser, MutableBoundaryReader, NumberParser}
 import org.scalameter.{Gen, PerformanceTest}
 
 import scala.collection.immutable.PagedSeq

@@ -1,4 +1,4 @@
-package chunkedV2;
+package chunked;
 
 import java.io.IOException;
 import java.io.PrintWriter;

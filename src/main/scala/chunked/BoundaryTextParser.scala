@@ -9,7 +9,7 @@ import scala.util.parsing.input.{Reader, CharSequenceReader}
 /**
  * Created by alex on 24.04.15.
  */
-object BoundaryTextParser extends MyRegexParsers {
+object BoundaryTextParser extends StringParsers {
 
   def parseBonjour: Parser[String] = "bonjour"
 

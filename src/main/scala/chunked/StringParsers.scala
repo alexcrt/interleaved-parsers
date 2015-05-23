@@ -1,4 +1,4 @@
-package chunkedV2
+package chunked
 
 
 import scala.collection.immutable.PagedSeq
