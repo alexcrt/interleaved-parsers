@@ -15,21 +15,21 @@ import scala.util.parsing.input.{CharSequenceReader, PagedSeqReader}
 object Benchmark extends PerformanceTest.Quickbenchmark {
   val maxChunkSizes = List(1000, 700, 500, 400, 300, 150, 100, 50, 10, 1)
 
-  println("Generate data")
+  /*println("Generate data")
   for (i <- 1 until 10) {
     ChunkedGeneratorForBenchmark.generate("temp" + i, maxChunkSizes(i))
-  }
+  }*/
 
-  val readers =
-    for (i <- 1 until 10) yield new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("benchmark_files/temp" + i)).bufferedReader()))
+  //val readers =
+    //for (i <- 1 until 10) yield new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("benchmark_files/temp" + i)).bufferedReader()))
 
-  val standardFile: Gen[FileReader] = Gen.single("standard")(new FileReader(new File("benchmark_files/randomjson")))
+  val r: Gen[Int] = Gen.single("dumbgen")(1)
   println("Start benchmark")
 
   performance of "One pass" in {
     measure method "parse" in {
-      using(standardFile) in {
-        rdr => JsonParser.parse(rdr)
+      using(r) in {
+        r => JsonParser.parse(new FileReader(new File("benchmark_files/100_lines/randomjson")))
       }
     }
   }

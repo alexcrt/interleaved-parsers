@@ -1,0 +1,114 @@
+/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/bin/java -Didea.launcher.port=7537 "-Didea.launcher.bin.path=/Applications/IntelliJ IDEA 14 CE.app/Contents/bin" -Dfile.encoding=UTF-8 -classpath "/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/ant-javafx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/javafx-mx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/packager.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/tools.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/deploy.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/javaws.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jfxswt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/plugin.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/jfxrt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Users/alex/IdeaProjects/parser-combinators/target/scala-2.11/classes:/Users/alex/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.2.jar:/Users/alex/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.3.jar:/Users/alex/.ivy2/cache/com.github.wookietreiber/scala-chart_2.11/jars/scala-chart_2.11-0.4.2.jar:/Users/alex/.ivy2/cache/com.storm-enroute/scalameter-core_2.11/jars/scalameter-core_2.11-0.6.jar:/Users/alex/.ivy2/cache/com.storm-enroute/scalameter_2.11/jars/scalameter_2.11-0.6.jar:/Users/alex/.ivy2/cache/org.apache.commons/commons-math3/jars/commons-math3-3.2.jar:/Users/alex/.ivy2/cache/org.jfree/jcommon/jars/jcommon-1.0.21.jar:/Users/alex/.ivy2/cache/org.jfree/jfreechart/jars/jfreechart-1.0.17.jar:/Users/alex/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.0.jar:/Users/alex/.ivy2/cache/org.scala-lang.modules/scala-swing_2.11/bundles/scala-swing_2.11-1.0.1.jar:/Users/alex/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.1.jar:/Users/alex/.ivy2/cache/org.scala-tools.testing/test-interface/jars/test-interface-0.5.jar:/Users/alex/.ivy2/cache/xml-apis/xml-apis/jars/xml-apis-1.3.04.jar:/Applications/IntelliJ IDEA 14 CE.app/Contents/lib/idea_rt.jar" com.intellij.rt.execution.application.AppMain benchmarks.Benchmark
+Start benchmark
+Verification of the outputs
+ok
+ok
+ok
+ok
+ok
+ok
+ok
+ok
+ok
+Starting warmup.
+0. warmup run running time: 48.093599 (covNoGC: NaN, covGC: NaN)
+1. warmup run running time: 9.078896 (covNoGC: 0.9651, covGC: 0.9651)
+2. warmup run running time: 8.720784 (covNoGC: 1.0303, covGC: 1.0303)
+3. warmup run running time: 7.518256 (covNoGC: 1.0809, covGC: 1.0809)
+4. warmup run running time: 4.568682 (covNoGC: 1.1704, covGC: 1.1704)
+5. warmup run running time: 5.542735 (covNoGC: 1.2093, covGC: 1.2093)
+6. warmup run running time: 4.50766 (covNoGC: 1.2543, covGC: 1.2543)
+7. warmup run running time: 2.719902 (covNoGC: 1.3235, covGC: 1.3235)
+8. warmup run running time: 3.639683 (covNoGC: 1.3613, covGC: 1.3613)
+9. warmup run running time: 4.724457 (covNoGC: 1.3704, covGC: 1.3704)
+10. warmup run running time: 5.778059 (covNoGC: 0.3742, covGC: 0.3742)
+11. warmup run running time: 4.202383 (covNoGC: 0.3452, covGC: 0.3452)
+12. warmup run running time: 5.106052 (covNoGC: 0.2686, covGC: 0.2686)
+13. warmup run running time: 4.965538 (covNoGC: 0.1968, covGC: 0.1968)
+14. warmup run running time: 4.426124 (covNoGC: 0.1977, covGC: 0.1977)
+15. warmup run running time: 5.064552 (covNoGC: 0.1896, covGC: 0.1896)
+16. warmup run running time: 4.536799 (covNoGC: 0.1894, covGC: 0.1894)
+17. warmup run running time: 4.412282 (covNoGC: 0.1250, covGC: 0.1250)
+18. warmup run running time: 3.435476 (covNoGC: 0.1346, covGC: 0.1346)
+19. warmup run running time: 3.57138 (covNoGC: 0.1573, covGC: 0.1573)
+20. warmup run running time: 4.200413 (covNoGC: 0.1309, covGC: 0.1309)
+21. warmup run running time: 7.438892 (covNoGC: 0.2363, covGC: 0.2363)
+22. warmup run running time: 3.169845 (covNoGC: 0.2661, covGC: 0.2661)
+23. warmup run running time: 1.815112 (covNoGC: 0.3470, covGC: 0.3470)
+24. warmup run running time: 3.005917 (covNoGC: 0.3701, covGC: 0.3701)
+25. warmup run running time: 1.674909 (covNoGC: 0.4377, covGC: 0.4377)
+26. warmup run running time: 2.512422 (covNoGC: 0.4667, covGC: 0.4667)
+GC detected.
+27. warmup run running time: 2.973961 (covNoGC: 0.4667, covGC: 0.4796)
+28. warmup run running time: 2.962824 (covNoGC: 0.4798, covGC: 0.4879)
+29. warmup run running time: 3.821382 (covNoGC: 0.4762, covGC: 0.4861)
+30. warmup run running time: 2.527381 (covNoGC: 0.4979, covGC: 0.5083)
+31. warmup run running time: 2.17414 (covNoGC: 0.5314, covGC: 0.2464)
+32. warmup run running time: 1.577274 (covNoGC: 0.2883, covGC: 0.2839)
+33. warmup run running time: 2.356926 (covNoGC: 0.2834, covGC: 0.2627)
+34. warmup run running time: 2.084854 (covNoGC: 0.2712, covGC: 0.2705)
+35. warmup run running time: 1.58564 (covNoGC: 0.2980, covGC: 0.2764)
+36. warmup run running time: 1.661911 (covNoGC: 0.2988, covGC: 0.3050)
+37. warmup run running time: 1.352793 (covNoGC: 0.3415, covGC: 0.3415)
+38. warmup run running time: 2.768312 (covNoGC: 0.3357, covGC: 0.3357)
+39. warmup run running time: 1.688401 (covNoGC: 0.2389, covGC: 0.2389)
+40. warmup run running time: 1.289462 (covNoGC: 0.2560, covGC: 0.2560)
+41. warmup run running time: 1.93856 (covNoGC: 0.2528, covGC: 0.2528)
+42. warmup run running time: 1.551871 (covNoGC: 0.2540, covGC: 0.2540)
+43. warmup run running time: 1.332543 (covNoGC: 0.2592, covGC: 0.2592)
+44. warmup run running time: 1.272308 (covNoGC: 0.2728, covGC: 0.2728)
+45. warmup run running time: 1.184336 (covNoGC: 0.2941, covGC: 0.2941)
+46. warmup run running time: 1.20719 (covNoGC: 0.3126, covGC: 0.3126)
+47. warmup run running time: 1.174015 (covNoGC: 0.3237, covGC: 0.3237)
+48. warmup run running time: 1.227837 (covNoGC: 0.1850, covGC: 0.1850)
+49. warmup run running time: 1.089945 (covNoGC: 0.1868, covGC: 0.1868)
+Steady-state not detected.
+Running test set for One pass.parse, curve Test-0
+Starting warmup.
+0. warmup run running time: 1.428255 (covNoGC: NaN, covGC: NaN)
+1. warmup run running time: 1.11161 (covNoGC: 0.1763, covGC: 0.1763)
+2. warmup run running time: 1.106097 (covNoGC: 0.1518, covGC: 0.1518)
+3. warmup run running time: 1.059421 (covNoGC: 0.1441, covGC: 0.1441)
+4. warmup run running time: 1.667588 (covNoGC: 0.2073, covGC: 0.2073)
+5. warmup run running time: 1.928572 (covNoGC: 0.2577, covGC: 0.2577)
+6. warmup run running time: 2.406876 (covNoGC: 0.3304, covGC: 0.3304)
+7. warmup run running time: 3.176542 (covNoGC: 0.4304, covGC: 0.4304)
+8. warmup run running time: 1.044385 (covNoGC: 0.4435, covGC: 0.4435)
+9. warmup run running time: 1.018104 (covNoGC: 0.4532, covGC: 0.4532)
+10. warmup run running time: 1.004058 (covNoGC: 0.4803, covGC: 0.4803)
+11. warmup run running time: 1.294682 (covNoGC: 0.4685, covGC: 0.4685)
+12. warmup run running time: 1.014992 (covNoGC: 0.4756, covGC: 0.4756)
+13. warmup run running time: 1.038937 (covNoGC: 0.4773, covGC: 0.4773)
+14. warmup run running time: 3.771272 (covNoGC: 0.5782, covGC: 0.5782)
+GC detected.
+15. warmup run running time: 2.231431 (covNoGC: 0.5782, covGC: 0.5738)
+16. warmup run running time: 2.033112 (covNoGC: 0.5761, covGC: 0.5759)
+17. warmup run running time: 1.654268 (covNoGC: 0.5876, covGC: 0.5498)
+18. warmup run running time: 1.40665 (covNoGC: 0.5623, covGC: 0.5264)
+19. warmup run running time: 1.836415 (covNoGC: 0.5264, covGC: 0.4854)
+20. warmup run running time: 1.741246 (covNoGC: 0.4886, covGC: 0.4438)
+21. warmup run running time: 1.825415 (covNoGC: 0.4461, covGC: 0.4203)
+22. warmup run running time: 1.719027 (covNoGC: 0.4263, covGC: 0.3767)
+23. warmup run running time: 2.162837 (covNoGC: 0.3765, covGC: 0.3221)
+24. warmup run running time: 1.783113 (covNoGC: 0.3297, covGC: 0.1338)
+25. warmup run running time: 1.823582 (covNoGC: 0.1135, covGC: 0.1135)
+26. warmup run running time: 1.700433 (covNoGC: 0.1065, covGC: 0.1065)
+27. warmup run running time: 1.617697 (covNoGC: 0.1083, covGC: 0.1083)
+28. warmup run running time: 1.820987 (covNoGC: 0.0802, covGC: 0.0802)
+Steady-state detected.
+Ending warmup.
+36 repetitions of the snippet starting.
+measurements: 1.567191, 1.463305, 1.54949, 1.98373, 1.376366, 1.441327, 1.509774, 1.504626, 1.497182, 1.458681, 1.009139, 1.179993, 1.180766, 1.01034, 1.513509, 1.492912, 1.531351, 1.570624, 1.53559, 3.15855, 0.759489, 0.757035, 0.773915, 1.26452, 1.450727, 1.458929, 2.65813, 0.767873, 0.961992, 0.94518, 0.769293, 1.176815, 1.645926, 1.571962, 2.069859, 1.66076
+Repetitions ended.
+::Benchmark One pass.parse::
+cores: 8
+hostname: tsf-476-wpa-5-187.epfl.ch
+jvm-name: Java HotSpot(TM) 64-Bit Server VM
+jvm-vendor: Oracle Corporation
+jvm-version: 25.45-b02
+os-arch: x86_64
+os-name: Mac OS X
+Parameters(dumbgen -> 1): 0.757035
+
+
+Process finished with exit code 0
