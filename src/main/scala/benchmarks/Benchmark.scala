@@ -29,7 +29,7 @@ object Benchmark extends PerformanceTest.Quickbenchmark {
   performance of "One pass" in {
     measure method "parse" in {
       using(r) in {
-        r => JsonParser.parse(new FileReader(new File("benchmark_files/100_lines/randomjson")))
+        r => JsonParser.parse(new FileReader(new File("benchmark_files/10000_lines/randomjson")))
       }
     }
   }
