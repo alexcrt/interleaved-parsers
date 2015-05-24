@@ -45,9 +45,12 @@ object UglyBenchmark {
     }
 
     println("Mesuring time...")
+    writer.write("==========================================")
     writer.write("Standard vs Chunked\n")
     for (dirName <- dirList) {
+      writer.write("-------------------------\n")
       writer.write(dirName+"\n")
+      writer.write("-------------------------\n")
       writer.write("Warmup... Doing "+warmupIterations+" iterations...\n")
       for (i <- 0 until warmupIterations) {
         for (chunkSize <- maxChunkSizes) {
@@ -82,9 +85,10 @@ object UglyBenchmark {
           println(res.equals(resChunked.get))
         }
       }
-
-      writer.close()
     }
+    writer.write("==========================================")
+
+    writer.close()
 
 
   }
