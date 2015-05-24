@@ -1,4 +1,4 @@
-package mime
+package utils
 
 import scala.util.parsing.combinator.RegexParsers
 

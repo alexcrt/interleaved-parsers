@@ -2,8 +2,8 @@ package chunked
 
 
 import scala.collection.immutable.PagedSeq
-import scala.util.parsing.input._
 import scala.util.parsing.combinator.Parsers
+import scala.util.parsing.input._
 
 
 /**
@@ -13,22 +13,20 @@ trait StringParsers extends Parsers {
 
   type Elem = Char
 
-  protected val skipWhitespace = true
-
   protected val whiteSpaces = Set('\t', '\r', '\n', '\f', ' ')
 
-  def w : Parser[String] = new Parser[String] {
+  def w: Parser[String] = new Parser[String] {
     def apply(in: Input) = Success("", handleWhiteSpace(in))
   }
 
-  def digit: Parser[Char] = acceptIf(_.isDigit)(e => "Expected digit but was "+e)
+  def digit: Parser[Char] = acceptIf(_.isDigit)(e => "Expected digit but was " + e)
 
-def integerNumber: Parser[String] = opt("-") ~ rep1(digit) map {
-  case Some(minus) ~ nb => minus + nb.mkString
-  case None ~ nb => nb.mkString
-}
+  def integerNumber: Parser[String] = opt("-") ~ rep1(digit) map {
+    case Some(minus) ~ nb => minus + nb.mkString
+    case None ~ nb => nb.mkString
+  }
 
-  def decimalNumber:Parser[String] = opt("-") ~ (decimalNumber0 | decimalNumber1) map {
+  def decimalNumber: Parser[String] = opt("-") ~ (decimalNumber0 | decimalNumber1) map {
     case Some(minus) ~ nb => minus + nb
     case None ~ nb => nb
   }
@@ -42,25 +40,20 @@ def integerNumber: Parser[String] = opt("-") ~ rep1(digit) map {
     case p1 ~ "." ~ p2 => p1.mkString + "." + p2.mkString
   }
 
-  def character: Parser[Char] = acceptIf(e => Character.isDefined(e))(e => "Expected character but was "+e)
+  def character: Parser[Char] = acceptIf(e => Character.isDefined(e))(e => "Expected character but was " + e)
 
-  def nonQuoted: Parser[Char] = acceptIf(e => e != '"')(e => "Expected character that was not a quote but was "+e)
+  def nonQuoted: Parser[Char] = acceptIf(e => e != '"')(e => "Expected character that was not a quote but was " + e)
 
   def quoted: Parser[Char] = "\\" ~> character
 
   def stringLiteral: Parser[String] = "\"" ~> rep1(quoted | nonQuoted) <~ "\"" map (l => l.mkString)
 
   def handleWhiteSpace(in: Input): Input = {
-    if (!skipWhitespace) {
-      in
-    }
-    else {
       var in0 = in
       while (whiteSpaces.contains(in0.first)) {
         in0 = in0.rest
       }
       in0
-    }
   }
 
   implicit def literal(s: String): Parser[String] = new Parser[String] {

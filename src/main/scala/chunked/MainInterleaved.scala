@@ -1,21 +1,19 @@
 package chunked
 
 import java.io.{File, FileReader}
-import java.nio.file.{Paths, Files}
-import java.util.stream.Collectors
 
 import scala.collection.immutable.PagedSeq
 import scala.io.Source
-import scala.util.parsing.input.{CharArrayReader, PagedSeqReader, CharSequenceReader}
+import scala.util.parsing.input.{CharSequenceReader, PagedSeqReader}
 
 /**
  * Created by alex on 25.04.15.
  */
 object MainInterleaved {
 
-  def main(args: Array[String]) = {
+  def interleaved() = {
     /*
-    val res = BoundaryTextParser.parseBonjour(new MutableBoundaryReader(NumberParser.number, new CharSequenceReader("\n3\nbon\n4\njour")))
+    val res = BoundaryTextParser.parseBonjour(new BoundaryReader(NumberParser.number, new CharSequenceReader("\n3\nbon\n4\njour")))
     println(res)
 
 
@@ -24,7 +22,7 @@ object MainInterleaved {
 
     //println("\n2\n{\"\n4\nname\n2\n\":\n1\n\"\n8\nvalue\" }\n0")
     val toParse = "\n5\n{\n  \"\n22\nproduct\": \"Live JSON\"}"
-    val jsonResBound = JsonBoundaryParser.root(new MutableBoundaryReader(NumberParser.number, new CharSequenceReader(toParse)))
+    val jsonResBound = JsonBoundaryParser.root(new BoundaryReader(NumberParser.number, new CharSequenceReader(toParse)))
     println(jsonResBound)
 */
     val res2 = JsonParser.parse(new FileReader(new File("testing_files/demoJSON2")))
@@ -32,10 +30,26 @@ object MainInterleaved {
 
     val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).bufferedReader()))
 
-    val res3 = JsonParser.root(new MutableBoundaryReader(NumberParser.number, buf)).get
+    val res3 = JsonParser.root(new BoundaryReader(NumberParser.number, buf)).get
     println(res3)
 
     println(res2)
+
+  }
+
+  def chunkedIntoOneDump() = {
+    val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).bufferedReader()))
+    val x = DumpChunkedIntoString.parse(buf)
+
+    val res2 = JsonParser.parse(new FileReader(new File("testing_files/demoJSON2")))
+
+    val res3 = JsonParser.root(new CharSequenceReader(x))
+    println(res2.equals(res3.get))
+  }
+  def main(args: Array[String]) = {
+
+    interleaved()
+    chunkedIntoOneDump()
 
   }
 

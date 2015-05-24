@@ -3,7 +3,7 @@ package pcap
 import java.io.Reader
 import java.lang.Long
 
-import chunked.MutableBoundaryReader
+import chunked.BoundaryReader
 import pcap.ByteOrder.{ByteOrder, Reversed, Standard}
 
 import scala.util.parsing.combinator.RegexParsers
@@ -67,7 +67,7 @@ trait PcapParser extends RegexParsers {
 
   def pcapPacketData(order: ByteOrder, len: Int, networkPacketType: NetworkPacketType): Parser[PcapPacketData] = networkPacketType match {
     case Ethernet =>  new Parser[PcapPacketData] {
-      def apply(in: Input) = EthernetFrameParser.ethernetTrame(new MutableBoundaryReader(len, in)).asInstanceOf[ParseResult[NetworkPacket]] match {
+      def apply(in: Input) = EthernetFrameParser.ethernetTrame(new BoundaryReader(null, in)).asInstanceOf[ParseResult[NetworkPacket]] match {
         case Success(res, rdr) => Success(new PcapPacketData(res), rdr)
         case e => throw new RuntimeException(e.toString)
       }

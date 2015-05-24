@@ -2,6 +2,8 @@ package mime
 
 import java.io.Reader
 
+import utils.TakeUntilParser
+
 import scala.util.parsing.combinator._
 
 object TextParser extends TakeUntilParser {

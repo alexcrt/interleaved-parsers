@@ -2,12 +2,12 @@ package benchmarks
 
 import java.io.{File, FileReader}
 
-import chunked.{JsonParser, MutableBoundaryReader, NumberParser}
+import chunked.{DumpChunkedIntoString, JsonParser, BoundaryReader, NumberParser}
 import org.scalameter.{Gen, PerformanceTest}
 
 import scala.collection.immutable.PagedSeq
 import scala.io.Source
-import scala.util.parsing.input.PagedSeqReader
+import scala.util.parsing.input.{CharSequenceReader, PagedSeqReader}
 
 /**
  * Created by alex on 23.05.15.
@@ -34,20 +34,34 @@ object Benchmark extends PerformanceTest.Quickbenchmark {
     }
   }
 
-  //TODO: La je veux comparer par rapport a un input chunked
 
-  /*performance of "Chunked" in {
+  /*
+  //One pass chunked
+  performance of "One pass chunked" in {
     for (i <- 1 until 10) {
       measure method "root" in {
         val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("benchmark_files/temp" + i)).bufferedReader()))
-        val res3 = JsonParser.root(new MutableBoundaryReader(NumberParser.number, buf)).get
+        val res3 = JsonParser.root(new BoundaryReader(NumberParser.number, buf)).get
       }
     }
-  }*/
+  }
 
-  /*
+
+  //Read in two pass
+  performance of "Two pass chunked" in {
+    for (i <- 1 until 10) {
+      measure method "root" in {
+          val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("benchmark_files/temp" + i)).bufferedReader()))
+          val x = DumpChunkedIntoString.parse(buf)
+          val res = JsonParser.root(new CharSequenceReader(x))
+      }
+    }
+  }
+
+*/
+
   println("Verification of the outputs")
   for (i <- 1 until 10) {
     println("ok")
-  }*/
+  }
 }

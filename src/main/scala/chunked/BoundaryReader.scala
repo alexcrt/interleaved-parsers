@@ -18,7 +18,7 @@ object NumberParser extends RegexParsers {
   def number: Parser[Int] = CRLF ~>  """\d+""".r <~ CRLF map (x => x.toInt)
 }
 
-class MutableBoundaryReader private (length: Int, parseLen: Parser[Int], reader: Reader[Char]) extends Reader[Char] {
+class BoundaryReader private (length: Int, parseLen: Parser[Int], reader: Reader[Char]) extends Reader[Char] {
 
   var len = 0
   var rdr = reader
