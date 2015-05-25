@@ -1,0 +1,319 @@
+==========================================
+String vs Regex
+------------------------------------
+benchmark_files/100_lines
+------------------------------------
+Warmup... Doing 50 iterations...
+
+Testing
+
+	Regex min time: 785097 nanoseconds / 0.785097 milliseconds / 7.85097E-4 seconds 
+	Regex max time: 1587750 nanoseconds / 1.58775 milliseconds / 0.00158775 seconds 
+	Regex mean time: 1113975 nanoseconds / 1.113975 milliseconds / 0.001113975 seconds 
+--------------------
+	String min time: 1178245 nanoseconds / 1.178245 milliseconds / 0.001178245 seconds 
+	String max time: 3728975 nanoseconds / 3.728975 milliseconds / 0.003728975 seconds 
+	String mean time: 1978648 nanoseconds / 1.978648 milliseconds / 0.001978648 seconds 
+------------------------------------
+benchmark_files/1000_lines
+------------------------------------
+Warmup... Doing 50 iterations...
+
+Testing
+
+	Regex min time: 6790244 nanoseconds / 6.790244 milliseconds / 0.006790244 seconds 
+	Regex max time: 8202713 nanoseconds / 8.202713 milliseconds / 0.008202713 seconds 
+	Regex mean time: 7414851 nanoseconds / 7.414851 milliseconds / 0.007414851 seconds 
+--------------------
+	String min time: 12650682 nanoseconds / 12.650682 milliseconds / 0.012650682 seconds 
+	String max time: 17555750 nanoseconds / 17.55575 milliseconds / 0.01755575 seconds 
+	String mean time: 13847535 nanoseconds / 13.847535 milliseconds / 0.013847535 seconds 
+====================================================================================
+Standard vs Chunked
+------------------------------------
+benchmark_files/100_lines
+------------------------------------
+Warmup... Doing 50 iterations on max chunk size 1000 ...
+
+Testing
+
+Standard vs Chunk of max size 1000
+
+	Standard min time: 754906 nanoseconds / 0.754906 milliseconds / 7.54906E-4 seconds 
+	Standard max time: 823680 nanoseconds / 0.82368 milliseconds / 8.2368E-4 seconds 
+	Standard mean time: 782314 nanoseconds / 0.782314 milliseconds / 7.82314E-4 seconds 
+
+	Chunked min time: 820518 nanoseconds / 0.820518 milliseconds / 8.20518E-4 seconds 
+	Chunked max time: 887308 nanoseconds / 0.887308 milliseconds / 8.87308E-4 seconds 
+	Chunked mean time: 838799 nanoseconds / 0.838799 milliseconds / 8.38799E-4 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 700 ...
+
+Testing
+
+Standard vs Chunk of max size 700
+
+	Standard min time: 728987 nanoseconds / 0.728987 milliseconds / 7.28987E-4 seconds 
+	Standard max time: 879855 nanoseconds / 0.879855 milliseconds / 8.79855E-4 seconds 
+	Standard mean time: 774403 nanoseconds / 0.774403 milliseconds / 7.74403E-4 seconds 
+
+	Chunked min time: 791077 nanoseconds / 0.791077 milliseconds / 7.91077E-4 seconds 
+	Chunked max time: 912497 nanoseconds / 0.912497 milliseconds / 9.12497E-4 seconds 
+	Chunked mean time: 840107 nanoseconds / 0.840107 milliseconds / 8.40107E-4 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 500 ...
+
+Testing
+
+Standard vs Chunk of max size 500
+
+	Standard min time: 918930 nanoseconds / 0.91893 milliseconds / 9.1893E-4 seconds 
+	Standard max time: 1486435 nanoseconds / 1.486435 milliseconds / 0.001486435 seconds 
+	Standard mean time: 1174521 nanoseconds / 1.174521 milliseconds / 0.001174521 seconds 
+
+	Chunked min time: 903117 nanoseconds / 0.903117 milliseconds / 9.03117E-4 seconds 
+	Chunked max time: 1585086 nanoseconds / 1.585086 milliseconds / 0.001585086 seconds 
+	Chunked mean time: 1140301 nanoseconds / 1.140301 milliseconds / 0.001140301 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 400 ...
+
+Testing
+
+Standard vs Chunk of max size 400
+
+	Standard min time: 712465 nanoseconds / 0.712465 milliseconds / 7.12465E-4 seconds 
+	Standard max time: 1205908 nanoseconds / 1.205908 milliseconds / 0.001205908 seconds 
+	Standard mean time: 906829 nanoseconds / 0.906829 milliseconds / 9.06829E-4 seconds 
+
+	Chunked min time: 778280 nanoseconds / 0.77828 milliseconds / 7.7828E-4 seconds 
+	Chunked max time: 1655089 nanoseconds / 1.655089 milliseconds / 0.001655089 seconds 
+	Chunked mean time: 1005091 nanoseconds / 1.005091 milliseconds / 0.001005091 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 300 ...
+
+Testing
+
+Standard vs Chunk of max size 300
+
+	Standard min time: 711749 nanoseconds / 0.711749 milliseconds / 7.11749E-4 seconds 
+	Standard max time: 1465694 nanoseconds / 1.465694 milliseconds / 0.001465694 seconds 
+	Standard mean time: 889362 nanoseconds / 0.889362 milliseconds / 8.89362E-4 seconds 
+
+	Chunked min time: 776170 nanoseconds / 0.77617 milliseconds / 7.7617E-4 seconds 
+	Chunked max time: 1637455 nanoseconds / 1.637455 milliseconds / 0.001637455 seconds 
+	Chunked mean time: 953773 nanoseconds / 0.953773 milliseconds / 9.53773E-4 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 150 ...
+
+Testing
+
+Standard vs Chunk of max size 150
+
+	Standard min time: 742066 nanoseconds / 0.742066 milliseconds / 7.42066E-4 seconds 
+	Standard max time: 892728 nanoseconds / 0.892728 milliseconds / 8.92728E-4 seconds 
+	Standard mean time: 812256 nanoseconds / 0.812256 milliseconds / 8.12256E-4 seconds 
+
+	Chunked min time: 810844 nanoseconds / 0.810844 milliseconds / 8.10844E-4 seconds 
+	Chunked max time: 1174322 nanoseconds / 1.174322 milliseconds / 0.001174322 seconds 
+	Chunked mean time: 942442 nanoseconds / 0.942442 milliseconds / 9.42442E-4 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 100 ...
+
+Testing
+
+Standard vs Chunk of max size 100
+
+	Standard min time: 795972 nanoseconds / 0.795972 milliseconds / 7.95972E-4 seconds 
+	Standard max time: 1493920 nanoseconds / 1.49392 milliseconds / 0.00149392 seconds 
+	Standard mean time: 1062455 nanoseconds / 1.062455 milliseconds / 0.001062455 seconds 
+
+	Chunked min time: 988596 nanoseconds / 0.988596 milliseconds / 9.88596E-4 seconds 
+	Chunked max time: 1596226 nanoseconds / 1.596226 milliseconds / 0.001596226 seconds 
+	Chunked mean time: 1242097 nanoseconds / 1.242097 milliseconds / 0.001242097 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 50 ...
+
+Testing
+
+Standard vs Chunk of max size 50
+
+	Standard min time: 751032 nanoseconds / 0.751032 milliseconds / 7.51032E-4 seconds 
+	Standard max time: 1079549 nanoseconds / 1.079549 milliseconds / 0.001079549 seconds 
+	Standard mean time: 933037 nanoseconds / 0.933037 milliseconds / 9.33037E-4 seconds 
+
+	Chunked min time: 936585 nanoseconds / 0.936585 milliseconds / 9.36585E-4 seconds 
+	Chunked max time: 1544772 nanoseconds / 1.544772 milliseconds / 0.001544772 seconds 
+	Chunked mean time: 1145903 nanoseconds / 1.145903 milliseconds / 0.001145903 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 10 ...
+
+Testing
+
+Standard vs Chunk of max size 10
+
+	Standard min time: 697290 nanoseconds / 0.69729 milliseconds / 6.9729E-4 seconds 
+	Standard max time: 1164945 nanoseconds / 1.164945 milliseconds / 0.001164945 seconds 
+	Standard mean time: 924826 nanoseconds / 0.924826 milliseconds / 9.24826E-4 seconds 
+
+	Chunked min time: 1092010 nanoseconds / 1.09201 milliseconds / 0.00109201 seconds 
+	Chunked max time: 2120803 nanoseconds / 2.120803 milliseconds / 0.002120803 seconds 
+	Chunked mean time: 1418839 nanoseconds / 1.418839 milliseconds / 0.001418839 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 1 ...
+
+Testing
+
+Standard vs Chunk of max size 1
+
+	Standard min time: 825018 nanoseconds / 0.825018 milliseconds / 8.25018E-4 seconds 
+	Standard max time: 1608238 nanoseconds / 1.608238 milliseconds / 0.001608238 seconds 
+	Standard mean time: 1246889 nanoseconds / 1.246889 milliseconds / 0.001246889 seconds 
+
+	Chunked min time: 3126643 nanoseconds / 3.126643 milliseconds / 0.003126643 seconds 
+	Chunked max time: 5223574 nanoseconds / 5.223574 milliseconds / 0.005223574 seconds 
+	Chunked mean time: 4125444 nanoseconds / 4.125444 milliseconds / 0.004125444 seconds 
+-------------------------
+------------------------------------
+benchmark_files/1000_lines
+------------------------------------
+Warmup... Doing 50 iterations on max chunk size 1000 ...
+
+Testing
+
+Standard vs Chunk of max size 1000
+
+	Standard min time: 7779213 nanoseconds / 7.779213 milliseconds / 0.007779213 seconds 
+	Standard max time: 14051594 nanoseconds / 14.051594 milliseconds / 0.014051594 seconds 
+	Standard mean time: 10019831 nanoseconds / 10.019831 milliseconds / 0.010019831 seconds 
+
+	Chunked min time: 8994681 nanoseconds / 8.994681 milliseconds / 0.008994681 seconds 
+	Chunked max time: 12942694 nanoseconds / 12.942694 milliseconds / 0.012942694 seconds 
+	Chunked mean time: 10467121 nanoseconds / 10.467121 milliseconds / 0.010467121 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 700 ...
+
+Testing
+
+Standard vs Chunk of max size 700
+
+	Standard min time: 6655977 nanoseconds / 6.655977 milliseconds / 0.006655977 seconds 
+	Standard max time: 11857373 nanoseconds / 11.857373 milliseconds / 0.011857373 seconds 
+	Standard mean time: 9501358 nanoseconds / 9.501358 milliseconds / 0.009501358 seconds 
+
+	Chunked min time: 8166470 nanoseconds / 8.16647 milliseconds / 0.00816647 seconds 
+	Chunked max time: 12623480 nanoseconds / 12.62348 milliseconds / 0.01262348 seconds 
+	Chunked mean time: 10647088 nanoseconds / 10.647088 milliseconds / 0.010647088 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 500 ...
+
+Testing
+
+Standard vs Chunk of max size 500
+
+	Standard min time: 6627729 nanoseconds / 6.627729 milliseconds / 0.006627729 seconds 
+	Standard max time: 9922116 nanoseconds / 9.922116 milliseconds / 0.009922116 seconds 
+	Standard mean time: 7983601 nanoseconds / 7.983601 milliseconds / 0.007983601 seconds 
+
+	Chunked min time: 7321782 nanoseconds / 7.321782 milliseconds / 0.007321782 seconds 
+	Chunked max time: 12980803 nanoseconds / 12.980803 milliseconds / 0.012980803 seconds 
+	Chunked mean time: 8930635 nanoseconds / 8.930635 milliseconds / 0.008930635 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 400 ...
+
+Testing
+
+Standard vs Chunk of max size 400
+
+	Standard min time: 6623202 nanoseconds / 6.623202 milliseconds / 0.006623202 seconds 
+	Standard max time: 7330730 nanoseconds / 7.33073 milliseconds / 0.00733073 seconds 
+	Standard mean time: 6992388 nanoseconds / 6.992388 milliseconds / 0.006992388 seconds 
+
+	Chunked min time: 7179070 nanoseconds / 7.17907 milliseconds / 0.00717907 seconds 
+	Chunked max time: 8701275 nanoseconds / 8.701275 milliseconds / 0.008701275 seconds 
+	Chunked mean time: 7639641 nanoseconds / 7.639641 milliseconds / 0.007639641 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 300 ...
+
+Testing
+
+Standard vs Chunk of max size 300
+
+	Standard min time: 6659777 nanoseconds / 6.659777 milliseconds / 0.006659777 seconds 
+	Standard max time: 11154298 nanoseconds / 11.154298 milliseconds / 0.011154298 seconds 
+	Standard mean time: 7921123 nanoseconds / 7.921123 milliseconds / 0.007921123 seconds 
+
+	Chunked min time: 7176271 nanoseconds / 7.176271 milliseconds / 0.007176271 seconds 
+	Chunked max time: 11018327 nanoseconds / 11.018327 milliseconds / 0.011018327 seconds 
+	Chunked mean time: 8443204 nanoseconds / 8.443204 milliseconds / 0.008443204 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 150 ...
+
+Testing
+
+Standard vs Chunk of max size 150
+
+	Standard min time: 6653013 nanoseconds / 6.653013 milliseconds / 0.006653013 seconds 
+	Standard max time: 12588162 nanoseconds / 12.588162 milliseconds / 0.012588162 seconds 
+	Standard mean time: 9455772 nanoseconds / 9.455772 milliseconds / 0.009455772 seconds 
+
+	Chunked min time: 7787880 nanoseconds / 7.78788 milliseconds / 0.00778788 seconds 
+	Chunked max time: 12667980 nanoseconds / 12.66798 milliseconds / 0.01266798 seconds 
+	Chunked mean time: 9939371 nanoseconds / 9.939371 milliseconds / 0.009939371 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 100 ...
+
+Testing
+
+Standard vs Chunk of max size 100
+
+	Standard min time: 6645084 nanoseconds / 6.645084 milliseconds / 0.006645084 seconds 
+	Standard max time: 11356666 nanoseconds / 11.356666 milliseconds / 0.011356666 seconds 
+	Standard mean time: 7816416 nanoseconds / 7.816416 milliseconds / 0.007816416 seconds 
+
+	Chunked min time: 7195274 nanoseconds / 7.195274 milliseconds / 0.007195274 seconds 
+	Chunked max time: 11094483 nanoseconds / 11.094483 milliseconds / 0.011094483 seconds 
+	Chunked mean time: 8825029 nanoseconds / 8.825029 milliseconds / 0.008825029 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 50 ...
+
+Testing
+
+Standard vs Chunk of max size 50
+
+	Standard min time: 6721789 nanoseconds / 6.721789 milliseconds / 0.006721789 seconds 
+	Standard max time: 12969407 nanoseconds / 12.969407 milliseconds / 0.012969407 seconds 
+	Standard mean time: 9950034 nanoseconds / 9.950034 milliseconds / 0.009950034 seconds 
+
+	Chunked min time: 8749812 nanoseconds / 8.749812 milliseconds / 0.008749812 seconds 
+	Chunked max time: 13087067 nanoseconds / 13.087067 milliseconds / 0.013087067 seconds 
+	Chunked mean time: 11349292 nanoseconds / 11.349292 milliseconds / 0.011349292 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 10 ...
+
+Testing
+
+Standard vs Chunk of max size 10
+
+	Standard min time: 6532982 nanoseconds / 6.532982 milliseconds / 0.006532982 seconds 
+	Standard max time: 10616717 nanoseconds / 10.616717 milliseconds / 0.010616717 seconds 
+	Standard mean time: 7321485 nanoseconds / 7.321485 milliseconds / 0.007321485 seconds 
+
+	Chunked min time: 9897280 nanoseconds / 9.89728 milliseconds / 0.00989728 seconds 
+	Chunked max time: 12503070 nanoseconds / 12.50307 milliseconds / 0.01250307 seconds 
+	Chunked mean time: 10737097 nanoseconds / 10.737097 milliseconds / 0.010737097 seconds 
+-------------------------
+Warmup... Doing 50 iterations on max chunk size 1 ...
+
+Testing
+
+Standard vs Chunk of max size 1
+
+	Standard min time: 6608945 nanoseconds / 6.608945 milliseconds / 0.006608945 seconds 
+	Standard max time: 9193839 nanoseconds / 9.193839 milliseconds / 0.009193839 seconds 
+	Standard mean time: 7463556 nanoseconds / 7.463556 milliseconds / 0.007463556 seconds 
+
+	Chunked min time: 25902770 nanoseconds / 25.90277 milliseconds / 0.02590277 seconds 
+	Chunked max time: 30144936 nanoseconds / 30.144936 milliseconds / 0.030144936 seconds 
+	Chunked mean time: 27304982 nanoseconds / 27.304982 milliseconds / 0.027304982 seconds 
+-------------------------
+==========================================

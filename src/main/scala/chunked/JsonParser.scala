@@ -11,18 +11,19 @@ object JsonParser extends StringParsers {
         case e => throw new RuntimeException(e.toString)
     }
 
-    def root: Parser[Any] = obj  |
-                            arr  |
-                            stringLiteral |
-                            decimalNumber ^^ (_.toDouble) |
-                            integerNumber ^^ (_.toInt) |
-                            "null" ^^ (x => null) |
-                            "true" ^^ (x => true) |
-                            "false" ^^ (x => false)
+    def root: Parser[Any] = obj | arr
+
+    def value: Parser[Any] = obj |
+                             arr |
+                             stringLiteral |
+                             decimalNumber ^^ (_.toDouble) |
+                             "null" ^^ (x => null) |
+                             "true" ^^ (x => true) |
+                             "false" ^^ (x => false)
 
     def obj: Parser[Map[String, Any]] = "{" ~> w ~> repsep(member, w ~>","<~ w) <~ w <~"}" ^^ (ListMap() ++ _)
 
-    def arr: Parser[List[Any]] = "["~> w ~> repsep(root, w ~>","<~ w) <~ w <~"]"
+    def arr: Parser[List[Any]] = "["~> w ~> repsep(value, w ~>","<~ w) <~ w <~"]"
 
-    def member: Parser[(String, Any)] = stringLiteral ~ w ~ ":" ~ w ~ root map {case name ~ w1 ~ ":" ~ w2 ~ value => (name, value)}
+    def member: Parser[(String, Any)] = stringLiteral ~ w ~ ":" ~ w ~ value map {case name ~ w1 ~ ":" ~ w2 ~ value => (name, value)}
 }

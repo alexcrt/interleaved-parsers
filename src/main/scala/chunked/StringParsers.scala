@@ -44,9 +44,9 @@ trait StringParsers extends Parsers {
 
   def nonQuoted: Parser[Char] = acceptIf(e => e != '"')(e => "Expected character that was not a quote but was " + e)
 
-  def quoted: Parser[Char] = "\\" ~> character
+  def quoted: Parser[String] = '\\' ~ character map {case '\\' ~ c => "\\"+c }
 
-  def stringLiteral: Parser[String] = "\"" ~> rep1(quoted | nonQuoted) <~ "\"" map (l => l.mkString)
+  def stringLiteral: Parser[String] = "\"" ~> rep1(quoted | nonQuoted) <~ "\"" map (l => "\"" + l.mkString + "\"")
 
   def handleWhiteSpace(in: Input): Input = {
       var in0 = in
