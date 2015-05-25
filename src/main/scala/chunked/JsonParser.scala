@@ -26,4 +26,5 @@ object JsonParser extends StringParsers {
     def arr: Parser[List[Any]] = "["~> w ~> repsep(value, w ~>","<~ w) <~ w <~"]"
 
     def member: Parser[(String, Any)] = stringLiteral ~ w ~ ":" ~ w ~ value map {case name ~ w1 ~ ":" ~ w2 ~ value => (name, value)}
+  def member2: Parser[(String, Any)] = (stringLiteral <~ w <~ ":" ) ~ (w ~> value) map {case name ~ value => (name, value)}
 }

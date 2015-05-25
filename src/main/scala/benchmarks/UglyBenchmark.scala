@@ -2,20 +2,20 @@ package benchmarks
 
 import java.io.{File, FileReader, FileWriter}
 
-import chunked.{BoundaryReader, JsonParser, NumberParser}
+import chunked.{DumpChunkedIntoString, BoundaryReader, JsonParser, NumberParser}
 import utils.JsonParserWithRegex
 
 import scala.collection.immutable.PagedSeq
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
-import scala.util.parsing.input.PagedSeqReader
+import scala.util.parsing.input.{CharSequenceReader, PagedSeqReader}
 
 /**
  * Created by alex on 24.05.15.
  */
 object UglyBenchmark {
 
-  val dirList = List(100 , 1000, 10000, 100000).map(x => "benchmark_files/" + x + "_lines")
+  val dirList = List(100, 1000, 10000, 100000).map(x => "benchmark_files/" + x + "_lines")
   val maxChunkSizes = List(1000, 700, 500, 400, 300, 150, 100, 50, 10, 1)
 
   val warmupIterations = 50
@@ -38,9 +38,9 @@ object UglyBenchmark {
     println("Mesuring time...")
     stringVsRegex()
     standardVsChunked()
+    chunkedOnePassVsChunked2pass()
 
     writer.close()
-
   }
 
   def stringVsRegex() = {
@@ -55,7 +55,7 @@ object UglyBenchmark {
       writer.write("------------------------------------\n")
       writer.write(dirName + "\n")
       writer.write("------------------------------------\n")
-      writer.write("Warmup... Doing " + warmupIterations + " iterations...\n\n")
+      writer.write("Warmup... Doing " + warmupIterations + " iterations...\n")
       for (i <- 0 until warmupIterations) {
         val resRegex = JsonParserWithRegex.parse(new FileReader(new File(dirName + "/randomJson")))
         val resString = JsonParser.parse(new FileReader(new File(dirName + "/randomJson")))
@@ -66,7 +66,7 @@ object UglyBenchmark {
           throw new AssertionError()
         }
       }
-      writer.write("Testing\n\n")
+      writer.write("Testing... Doing " + realIterations+"...\n\n")
       var timesRegex = new ListBuffer[Long]()
       var timesString = new ListBuffer[Long]()
       for (i <- 0 until realIterations) {
@@ -105,7 +105,7 @@ object UglyBenchmark {
       writer.write("\tRegex min time: " + min + " nanoseconds / " + min / math.pow(10, 6) + " milliseconds / " + min / math.pow(10, 9) + " seconds \n")
       writer.write("\tRegex max time: " + max + " nanoseconds / " + max / math.pow(10, 6) + " milliseconds / " + max / math.pow(10, 9) + " seconds \n")
       writer.write("\tRegex mean time: " + mean + " nanoseconds / " + mean / math.pow(10, 6) + " milliseconds / " + mean / math.pow(10, 9) + " seconds \n")
-      writer.write("--------------------\n")
+      writer.write("\n")
 
       min = timesString.min
       max = timesString.max
@@ -131,7 +131,7 @@ object UglyBenchmark {
       writer.write(dirName + "\n")
       writer.write("------------------------------------\n")
       for (chunkSize <- maxChunkSizes) {
-        writer.write("Warmup... Doing " + warmupIterations + " iterations on max chunk size "+chunkSize+" ...\n\n")
+        writer.write("Warmup... Doing " + warmupIterations + " iterations on max chunk size "+chunkSize+" ...\n")
         for (i <- 0 until warmupIterations) {
           val res = JsonParser.parse(new FileReader(new File(dirName + "/randomJson")))
           val resChunked =
@@ -148,7 +148,7 @@ object UglyBenchmark {
 
         println("Standard vs Chunk of max size " + chunkSize)
 
-        writer.write("Testing\n\n")
+        writer.write("Testing... Doing " + realIterations+"...\n\n")
         writer.write("Standard vs Chunk of max size " + chunkSize + "\n\n")
         for (i <- 0 until realIterations) {
           //Standard
@@ -195,7 +195,92 @@ object UglyBenchmark {
         writer.write("\tChunked min time: " + min + " nanoseconds / " + min / math.pow(10, 6) + " milliseconds / " + min / math.pow(10, 9) + " seconds \n")
         writer.write("\tChunked max time: " + max + " nanoseconds / " + max / math.pow(10, 6) + " milliseconds / " + max / math.pow(10, 9) + " seconds \n")
         writer.write("\tChunked mean time: " + mean + " nanoseconds / " + mean / math.pow(10, 6) + " milliseconds / " + mean / math.pow(10, 9) + " seconds \n")
-        writer.write("-------------------------\n")
+        writer.write("\n")
+      }
+    }
+    writer.write("==========================================")
+  }
+
+  def chunkedOnePassVsChunked2pass() {
+    println("==========================================")
+    println("Chunked 1 pass vs Chunked 2 passes")
+    writer.write("==========================================\n")
+    writer.write("Chunked 1 pass vs Chunked 2 passes\n")
+
+    for (dirName <- dirList) {
+      println(dirName)
+      writer.write("------------------------------------\n")
+      writer.write(dirName + "\n")
+      writer.write("------------------------------------\n")
+      for (chunkSize <- maxChunkSizes) {
+        writer.write("Warmup... Doing " + warmupIterations + " iterations on max chunk size "+chunkSize+" ...\n")
+        for (i <- 0 until warmupIterations) {
+          val resChunked1pass = JsonParser.root(new BoundaryReader(NumberParser.number, new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File(dirName + "/randomChunked" + chunkSize + "Json")).bufferedReader()))))
+
+          val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File(dirName + "/randomChunked" + chunkSize + "Json")).bufferedReader()))
+          val x = DumpChunkedIntoString.parse(buf)
+          val resChunked2pass = JsonParser.root(new CharSequenceReader(x))
+          //Not letting JIT kick the results since we don't use them otherwise, and assert a correct result
+          if (!resChunked1pass.get.equals(resChunked2pass.get)) {
+            println("not equals")
+            throw new AssertionError()
+          }
+        }
+        var timesChunked1pass = new ListBuffer[Long]()
+        var timesChunked2pass = new ListBuffer[Long]()
+
+        println("Chunked 1 pass vs Chunked 2 passes of max size " + chunkSize)
+
+        writer.write("Testing... Doing " + realIterations+"...\n\n")
+        writer.write("Chunked 1 pass vs Chunked 2 passes of max size " + chunkSize + "\n\n")
+        for (i <- 0 until realIterations) {
+          //Chunked 1 pass
+          val rdr = new BoundaryReader(NumberParser.number, new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File(dirName + "/randomChunked" + chunkSize + "Json")).bufferedReader())))
+
+          var startTime = System.nanoTime()
+          val resChunked1pass = JsonParser.root(rdr)
+          val endTimeStandard = System.nanoTime() - startTime
+          timesChunked1pass += endTimeStandard
+
+          //Chunked 2 passes
+          val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File(dirName + "/randomChunked" + chunkSize + "Json")).bufferedReader()))
+          startTime = System.nanoTime()
+          val x = DumpChunkedIntoString.parse(buf)
+          val resChunked2pass = JsonParser.root(new CharSequenceReader(x))
+          val endTimeChunked = System.nanoTime() - startTime
+          timesChunked2pass += endTimeChunked
+
+          if (writeIterations) {
+            writer.write("Iteration " + (i + 1) + " =>\n")
+            writer.write("\tStandard: " + endTimeStandard + " nanoseconds\n")
+            writer.write("\tChunked:  " + endTimeChunked + " nanoseconds\n\n")
+          }
+
+          //Not letting JIT kick the results since we don't use them otherwise, and assert a correct result
+          if (!resChunked1pass.get.equals(resChunked2pass.get)) {
+            println("not equals")
+            throw new AssertionError()
+          }
+        }
+
+        assert(timesChunked1pass.size == timesChunked2pass.size)
+
+        var min = timesChunked1pass.min
+        var max = timesChunked1pass.max
+        var mean = timesChunked1pass.sum / timesChunked1pass.size
+
+        writer.write("\tChunked 1 pass min time: " + min + " nanoseconds / " + min / math.pow(10, 6) + " milliseconds / " + min / math.pow(10, 9) + " seconds \n")
+        writer.write("\tChunked 1 pass max time: " + max + " nanoseconds / " + max / math.pow(10, 6) + " milliseconds / " + max / math.pow(10, 9) + " seconds \n")
+        writer.write("\tChunked 1 pass mean time: " + mean + " nanoseconds / " + mean / math.pow(10, 6) + " milliseconds / " + mean / math.pow(10, 9) + " seconds \n\n")
+
+        min = timesChunked2pass.min
+        max = timesChunked2pass.max
+        mean = timesChunked2pass.sum / timesChunked2pass.size
+
+        writer.write("\tChunked 2 passes min time: " + min + " nanoseconds / " + min / math.pow(10, 6) + " milliseconds / " + min / math.pow(10, 9) + " seconds \n")
+        writer.write("\tChunked 2 passes max time: " + max + " nanoseconds / " + max / math.pow(10, 6) + " milliseconds / " + max / math.pow(10, 9) + " seconds \n")
+        writer.write("\tChunked 2 passes mean time: " + mean + " nanoseconds / " + mean / math.pow(10, 6) + " milliseconds / " + mean / math.pow(10, 9) + " seconds \n")
+        writer.write("\n")
       }
     }
     writer.write("==========================================")

@@ -36,11 +36,3 @@ object JsonParserWithRegex extends RegexParsers {
 
   def member: Parser[(String, Any)] = stringLiteral ~ ":" ~ value map { case name ~ ":" ~ value => (name, value) }
 }
-
-object MAIN {
-  def main(args: Array[String]) = {
-    val s = "[{\"_id\": 37}]"
-    println(JsonParser.root(new CharSequenceReader(s)))
-    println(JsonParserWithRegex.root(new CharSequenceReader(s)))
-  }
-}

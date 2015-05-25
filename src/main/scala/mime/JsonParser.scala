@@ -6,10 +6,12 @@ import scala.util.parsing.combinator._
 
 object JsonParser extends JavaTokenParsers {
 
-    def parse(input: Reader) = parseAll(root, input) match {
+    def parse(input: Reader) = parseAll(jsonroot, input) match {
         case Success(res, _) => res
         case e => throw new RuntimeException(e.toString);
     }
+
+    def jsonroot: Parser[Any] = obj | arr
 
     def root: Parser[Any] = obj | arr | stringLiteral | floatingPointNumber ^^ (_.toDouble)|
                              "null" ^^ (x => null) | "true" ^^ (x => true) | "false" ^^ (x => false)
