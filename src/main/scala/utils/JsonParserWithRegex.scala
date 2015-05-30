@@ -1,16 +1,18 @@
 package utils
 
-import java.io.Reader
-
-import chunked.JsonParser
+import scala.util.parsing.input.Reader
 
 import scala.collection.immutable.ListMap
 import scala.util.parsing.combinator.RegexParsers
-import scala.util.parsing.input.CharSequenceReader
 
 object JsonParserWithRegex extends RegexParsers {
 
-  def parse(input: Reader): Any = parse(root, input) match {
+  def parse(input: java.io.Reader): Any = parse(root, input) match {
+    case Success(res, _) => res
+    case e => throw new RuntimeException(e.toString)
+  }
+
+  def parse(input: Reader[Char]): Any = parse(root, input) match {
     case Success(res, _) => res
     case e => throw new RuntimeException(e.toString)
   }

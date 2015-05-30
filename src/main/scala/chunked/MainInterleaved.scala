@@ -30,7 +30,7 @@ object MainInterleaved {
 
     val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).bufferedReader()))
 
-    val res3 = JsonParser.root(new BoundaryReader(NumberParser.number, buf)).get
+    val res3 = JsonParser.parse(new BoundaryReader(NumberParser.number, buf))
     println(res3)
 
     println(res2)

@@ -1,6 +1,7 @@
 package benchmarks
 
 import java.io.{File, FileReader, FileWriter}
+import java.nio.file.{Paths, Files}
 
 import chunked.{DumpChunkedIntoString, BoundaryReader, JsonParser, NumberParser}
 import utils.JsonParserWithRegex
@@ -8,14 +9,14 @@ import utils.JsonParserWithRegex
 import scala.collection.immutable.PagedSeq
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
-import scala.util.parsing.input.{CharSequenceReader, PagedSeqReader}
+import scala.util.parsing.input.{CharArrayReader, CharSequenceReader, PagedSeqReader}
 
 /**
  * Created by alex on 24.05.15.
  */
 object UglyBenchmark {
 
-  val dirList = List(100, 1000, 10000, 100000).map(x => "benchmark_files/" + x + "_lines")
+  val dirList = List(100, 1000, 10000).map(x => "benchmark_files/" + x + "_lines")
   val maxChunkSizes = List(1000, 700, 500, 400, 300, 150, 100, 50, 10, 1)
 
   val warmupIterations = 50
@@ -31,14 +32,14 @@ object UglyBenchmark {
 
     for (dirName <- dirList) {
       for (chunkSize <- maxChunkSizes) {
-        ChunkedGeneratorForBenchmark.generate(dirName + "/randomJson", dirName + "/randomChunked" + chunkSize + "Json", chunkSize)
+        ChunkedGeneratorForBenchmark.generate(dirName + "/randomJson", dirName + "/randomChunked" + chunkSize + "Json", chunkSize, true)
       }
     }
 
     println("Mesuring time...")
     stringVsRegex()
-    standardVsChunked()
-    chunkedOnePassVsChunked2pass()
+    //standardVsChunked()
+    //chunkedOnePassVsChunked2pass()
 
     writer.close()
   }
@@ -50,21 +51,22 @@ object UglyBenchmark {
     writer.write("==========================================\n")
     writer.write("String vs Regex\n")
 
+
     for (dirName <- dirList) {
       println(dirName)
+
+      val array = Source.fromFile(dirName + "/randomJson").iter.toArray
+
       writer.write("------------------------------------\n")
       writer.write(dirName + "\n")
       writer.write("------------------------------------\n")
       writer.write("Warmup... Doing " + warmupIterations + " iterations...\n")
       for (i <- 0 until warmupIterations) {
-        val resRegex = JsonParserWithRegex.parse(new FileReader(new File(dirName + "/randomJson")))
-        val resString = JsonParser.parse(new FileReader(new File(dirName + "/randomJson")))
+        val resRegex = JsonParserWithRegex.parse(new CharArrayReader(array))
+        val resString = JsonParser.parse(new CharArrayReader(array))
 
         //Not letting JIT kick the results since we don't use them otherwise, and assert a correct result
-        if (!resRegex.equals(resString)) {
-          println("not equals")
-          throw new AssertionError()
-        }
+        assert(resRegex.equals(resString))
       }
       writer.write("Testing... Doing " + realIterations+"...\n\n")
       var timesRegex = new ListBuffer[Long]()
@@ -72,13 +74,13 @@ object UglyBenchmark {
       for (i <- 0 until realIterations) {
         //Regex
         var startTime = System.nanoTime()
-        val resRegex = JsonParserWithRegex.parse(new FileReader(new File(dirName + "/randomJson")))
+        val resRegex = JsonParserWithRegex.parse(new CharArrayReader(array))
         val endTimeRegex = System.nanoTime() - startTime
         timesRegex += endTimeRegex
 
         //String
         startTime = System.nanoTime()
-        val resString = JsonParser.parse(new FileReader(new File(dirName + "/randomJson")))
+        val resString = JsonParser.parse(new CharArrayReader(array))
         val endTimeString = System.nanoTime() - startTime
         timesString += endTimeString
 
@@ -89,10 +91,7 @@ object UglyBenchmark {
         }
 
         //Not letting JIT kick the results since we don't use them otherwise, and assert a correct result
-        if (!resRegex.equals(resString)) {
-          println("not equals")
-          throw new AssertionError()
-        }
+        assert(resRegex.equals(resString))
       }
 
 

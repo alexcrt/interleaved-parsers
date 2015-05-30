@@ -1,5 +1,6 @@
 package utils
 
+import scala.annotation.tailrec
 import scala.util.parsing.combinator.RegexParsers
 
 /**
@@ -7,8 +8,10 @@ import scala.util.parsing.combinator.RegexParsers
  */
 trait TakeUntilParser extends RegexParsers {
 
-    def CRLF = "\r\n" | "\n"
-    override def skipWhitespace = false
+  def CRLF = "\r\n" | "\n"
 
-    def takeUntil(condition: Parser[String], parser: Parser[String]): Parser[List[String]] = rep(not(condition) ~> parser)
+  override def skipWhitespace = false
+
+  def takeUntil[T](condition: Parser[Any], parser: Parser[T]): Parser[List[T]] = rep(not(condition) ~> parser)
+
 }

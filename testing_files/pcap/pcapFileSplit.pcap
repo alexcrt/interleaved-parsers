@@ -20,7 +20,7 @@ e913 0200 //timestamp offset microseconds
 4000      //
 4006      //
 51ac c0a8 00fe c0a8 00fe db62 0cea ccd8
-bb4d 0000 0000 a002 8018 ba51 0000 0204
+bb4d 0000 0000 a002 8018 ba51 0000 0204 //Some other parts + part of the message transmitted
 400c 0402 080a 00f0 de8e 0000 0000 0103
 0306
 =======================================
