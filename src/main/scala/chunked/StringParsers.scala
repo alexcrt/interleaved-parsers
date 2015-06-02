@@ -15,9 +15,7 @@ trait StringParsers extends Parsers {
 
   protected val whiteSpaces = Set('\t', '\r', '\n', '\f', ' ')
 
-  def w: Parser[String] = new Parser[String] {
-    def apply(in: Input) = Success("", handleWhiteSpace(in))
-  }
+  protected def skipWhitespace = whiteSpaces.nonEmpty
 
   def digit: Parser[Char] = acceptIf(_.isDigit)(e => "Expected digit but was " + e)
 
@@ -44,16 +42,20 @@ trait StringParsers extends Parsers {
 
   def nonQuoted: Parser[Char] = acceptIf(e => e != '"')(e => "Expected character that was not a quote but was " + e)
 
-  def quoted: Parser[String] = '\\' ~ character map {case '\\' ~ c => "\\"+c }
+  def quoted: Parser[String] = '\\' ~ character map { case '\\' ~ c => "\\" + c }
 
   def stringLiteral: Parser[String] = "\"" ~> rep1(quoted | nonQuoted) <~ "\"" map (l => "\"" + l.mkString + "\"")
 
-  def handleWhiteSpace(in: Input): Input = {
+  private def handleWhiteSpace(in: Input): Input = {
+    if (!skipWhitespace) {
+      in
+    } else {
       var in0 = in
-      while (whiteSpaces.contains(in0.first)) {
+      while (!in0.atEnd && whiteSpaces.contains(in0.first)) {
         in0 = in0.rest
       }
-      in0
+       in0
+    }
   }
 
   implicit def literal(s: String): Parser[String] = new Parser[String] {
@@ -61,10 +63,14 @@ trait StringParsers extends Parsers {
       var consumed = 0
       var rdr = in
 
+      if (skipWhitespace) rdr = handleWhiteSpace(rdr)
+
       while (consumed < s.length && s.charAt(consumed) == rdr.first) {
         rdr = rdr.rest
         consumed += 1
       }
+
+      if (skipWhitespace) rdr = handleWhiteSpace(rdr)
 
       if (consumed == s.length) {
         Success(s, rdr)

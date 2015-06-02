@@ -18,13 +18,11 @@ object NumberParser extends RegexParsers {
   def number: Parser[Int] = CRLF ~>  """\d+""".r <~ CRLF map (x => x.toInt)
 }
 
-class BoundaryReader private (length: Int, parseLen: Parser[Int], reader: Reader[Char]) extends Reader[Char] {
+class BoundaryReader (parseLen: Parser[Int], reader: Reader[Char]) extends Reader[Char] {
 
   var len = 0
   var rdr = reader
   var position = 0
-
-  def this(parseLen: Parser[Int], reader: Reader[Char]) = this(0, parseLen, reader)
 
   override def first: Char = {
     if(len == 0) {

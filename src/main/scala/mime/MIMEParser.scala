@@ -1,10 +1,11 @@
 package mime
 
 import java.io.Reader
+import utils.TakeUntilParser
 
 import scala.util.parsing.combinator.RegexParsers
 
-object MIMEParser extends RegexParsers {
+object MIMEParser extends RegexParsers with TakeUntilParser {
 
   override protected val whiteSpace = """[ ]+""".r
 
@@ -37,21 +38,7 @@ object MIMEParser extends RegexParsers {
 
   def getParser(t: (String, String), multipart: Boolean, boundary: Option[String] = None): Parser[Any] = t match {
 
-    case ("application", subtype) => subtype match {
-      case "octet-stream" => CRLFMore ~> contentTransferEncodingValue ~> contentTransferEncoding <~ CRLFMore flatMap {
-        case "base64" => Base64Parser.root(boundary).asInstanceOf[Parser[Any]]
-        case _ => throw new Exception("Not implemented yet")
-      }
-      case _ => throw new Exception("Not implemented yet")
-    }
-
     case ("text", subtype) => CRLFMore ~> getTextParser(subtype, boundary) <~ opt(CRLFMore)
-
-    case ("audio", _) => throw new Exception ("Not implemented yet")
-
-    case ("image", _) => throw new Exception ("Not implemented yet")
-
-    case ("message", _) => throw new Exception ("Not implemented yet")
 
     case ("multipart", subtype) =>
       if(multipart)
@@ -62,21 +49,27 @@ object MIMEParser extends RegexParsers {
           case None => throw new Exception ("Only mixed and digest are supported for multipart")
       }
 
-    case ("video", _) => throw new Exception ("Not implemented yet")
-
     case _ => throw new Exception("Cannot parse such type: " + t)
   }
 
   def getTextParser(subtype: String, boundary: Option[String] = None): Parser[Any] = subtype match {
     case ("json") => JsonParser.root.asInstanceOf[Parser[Any]]
-    case ("plain") => TextParser.root(boundary).asInstanceOf[Parser[Any]]
-    case ("csv") => CsvParser.file(boundary).asInstanceOf[Parser[Any]]
+    case ("plain") => boundary match {
+      case Some(bound) => takeUntil(rep(CRLF) ~> bound, ".*".r <~ CRLF) map (s => s.mkString("\n"))
+      case None => regex("(?s).*".r)
+    }
+    case ("csv") => boundary match {
+      case Some(bound) => takeUntil(rep(CRLF) ~> bound, CsvParser.record.asInstanceOf[Parser[Any]]  <~ CRLF)
+      case None => CsvParser.file.asInstanceOf[Parser[Any]]
+    }
     case _ => throw new Exception("Cannot parse such text subtype: " + subtype)
   }
 
   def getMultipartParser(value: MultipartOptions.Value): Parser[Any] =  value match {
-    case MultipartOptions.Mixed => "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLFMore flatMap (x => "--" ~> x ~> CRLFMore ~> repsep(content(true, Some("--"+x)), "--" ~> x <~ CRLFMore) <~ "--" <~ x <~ opt(CRLFMore))
-    case MultipartOptions.Digest => throw new Exception("Digest not implemented yet")
+    case MultipartOptions.Mixed =>
+      "boundary=" ~> '"' ~> """\w+""".r <~ '"' <~ CRLFMore flatMap (x => "--" ~> x ~> CRLFMore ~> repsep(content(true, Some("--"+x)), "--" ~> x <~ CRLFMore) <~ "--" <~ x <~ opt(CRLFMore))
+    case MultipartOptions.Digest =>
+      throw new Exception("Digest not implemented yet")
   }
 
   /**
