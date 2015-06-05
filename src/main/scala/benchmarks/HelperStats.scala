@@ -20,7 +20,7 @@ object HelperStats {
     val dirList = List(100, 1000, 10000).map(x => "benchmark_files/" + x + "_lines")
     val maxChunkSizes = List(1000, 700, 500, 300, 100, 50, 10, 5)
 
-    dirList.map(s => new File(s+"/randomJson.json.json.json")).foreach(f => println(f.length() / 1024d + "KB"))
+    dirList.map(s => new File(s+"/randomJson.json")).foreach(f => println(f.length() / 1024d + "KB"))
     println
     dirList.reverse
       .flatMap(d => maxChunkSizes.map(size => d+"/randomChunked"+size+"Json"))

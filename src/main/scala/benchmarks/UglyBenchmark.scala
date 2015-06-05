@@ -32,7 +32,7 @@ object UglyBenchmark {
 
     for (dirName <- dirList) {
       for (chunkSize <- maxChunkSizes) {
-        ChunkedGeneratorForBenchmark.generate(dirName + "/randomJson.json.json.json", dirName + "/randomChunked" + chunkSize + "Json", chunkSize, true)
+        ChunkedGeneratorForBenchmark.generate(dirName + "/randomJson.json", dirName + "/randomChunked" + chunkSize + "Json", chunkSize, true)
       }
     }
 
@@ -55,7 +55,7 @@ object UglyBenchmark {
     for (dirName <- dirList) {
       println(dirName)
 
-      val array = Source.fromFile(dirName + "/randomJson.json.json.json").iter.toArray
+      val array = Source.fromFile(dirName + "/randomJson.json").iter.toArray
 
       writer.write("------------------------------------\n")
       writer.write(dirName + "\n")
@@ -151,7 +151,7 @@ object UglyBenchmark {
         writer.write("Standard vs Chunk of max size " + chunkSize + "\n\n")
         for (i <- 0 until realIterations) {
           //Standard
-          val rdr = new FileReader(new File(dirName + "/randomJson.json.json.json"))
+          val rdr = new FileReader(new File(dirName + "/randomJson.json"))
           var startTime = System.nanoTime()
           val res = JsonParser.parse(rdr)
           val endTimeStandard = System.nanoTime() - startTime
