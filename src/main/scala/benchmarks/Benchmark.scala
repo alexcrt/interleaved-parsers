@@ -3,9 +3,9 @@ package benchmarks
 import java.io.{File, FileReader}
 
 import chunked._
-import org.scalameter.Measurer.IgnoringGC
+import org.scalameter.Measurer.{Default, IgnoringGC}
 import org.scalameter._
-import _root_.utils.JsonParserWithRegex
+import _root_.utils. JsonParserWithRegex
 import org.scalameter.execution.SeparateJvmsExecutor
 
 import scala.collection.immutable.PagedSeq
@@ -20,22 +20,25 @@ object Benchmark extends PerformanceTest.Microbenchmark {
 
   override lazy val executor = SeparateJvmsExecutor(
     new Executor.Warmer.Default,
-    Aggregator.min,
+    Aggregator.average,
     new IgnoringGC
   )
 
 
-  val dirList = List(100, 1000, 10000).map(x => "benchmark_files/" + x + "_lines")
+
+  val dirList = List(10000/*, 1000, 1000*/).map(x => "benchmark_files/" + x + "_lines")
   val maxChunkSizes = List(
-    100//,
-   // 700,
-   //300//,
-    //10/*,
-    //10*/
+    1000,
+    700,
+    300,
+    100,
+    10
   )
 
-/*
 
+
+
+  /*
   //RegexParsers VS StringParsers
   val genListNonChunked = dirList.map(d => (d, Gen.single("arr")(Source.fromFile(d+"/randomJson.json").iter.toArray)))
 
@@ -60,6 +63,7 @@ object Benchmark extends PerformanceTest.Microbenchmark {
 */
 
 
+
   val genListChunked = maxChunkSizes.reverse.flatMap(size => dirList.map(d => (d+"/randomChunked"+size+"Json", "chunk of size "+size, Gen.single("arr")(Source.fromFile(d+"/randomChunked"+size+"Json").iter.toArray))))
 
   //Chunked 1 pass
@@ -77,9 +81,9 @@ object Benchmark extends PerformanceTest.Microbenchmark {
   //Chunked 2 pass
   genListChunked.foreach(t => {
     performance of "Chunked input in 2 passes with " + t._1 + "=> " + t._2 in {
-      measure method "parse2passes" in {
+      measure method "parse" in {
         using(t._3) in {
-          arr => parse2passes(arr)
+          arr => JsonParser.parse(new SkipReader(ChunkListParser.parse(new CharArrayReader(arr)), new CharArrayReader(arr)))
         }
       }
     }

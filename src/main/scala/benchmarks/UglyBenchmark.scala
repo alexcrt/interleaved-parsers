@@ -3,7 +3,7 @@ package benchmarks
 import java.io.{File, FileReader, FileWriter}
 import java.nio.file.{Paths, Files}
 
-import chunked.{DumpChunkedIntoString, BoundaryReader, JsonParser, NumberParser}
+import chunked.{NumberParser, DumpChunkedIntoString, BoundaryReader, JsonParser}
 import utils.JsonParserWithRegex
 
 import scala.collection.immutable.PagedSeq
@@ -17,7 +17,13 @@ import scala.util.parsing.input.{CharArrayReader, CharSequenceReader, PagedSeqRe
 object UglyBenchmark {
 
   val dirList = List(100, 1000, 10000).map(x => "benchmark_files/" + x + "_lines")
-  val maxChunkSizes = List(1000, 700, 500, 400, 300, 150, 100, 50, 10, 1)
+  val maxChunkSizes = List(
+    1000,
+    700,
+    300,
+    100,
+    10
+  )
 
   val warmupIterations = 50
   val realIterations = 10
@@ -37,7 +43,7 @@ object UglyBenchmark {
     }
 
     println("Mesuring time...")
-    stringVsRegex()
+    //stringVsRegex()
     //standardVsChunked()
     //chunkedOnePassVsChunked2pass()
 

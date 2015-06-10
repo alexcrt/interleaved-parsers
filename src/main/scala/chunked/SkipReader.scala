@@ -20,20 +20,11 @@ object ChunkListParser extends RegexParsers {
   }
 
   def CRLF = "\n"
+
   def root:Parser[List[(Int, Int)]] =
-    rep(number flatMap(i => repN(i, acceptIf(e => true)(e => "that's not gonna happen")) map (u => (i, length(i)))))
+    rep(number flatMap(i => repN(i._1, acceptIf(e => true)(e => "that's not gonna happen")) map (x => (i._1, i._2))))
 
-  def number: Parser[Int] = CRLF ~>  """\d+""".r <~ CRLF map (x => x.toInt)
-
-  def length(i : Int): Int = {
-    var l = 0
-    var i0 = i
-    while(i0 != 0) {
-       i0 = i0 / 10
-       l += 1
-    }
-    l + 2
-  }
+  def number: Parser[(Int, Int)] = CRLF ~>  """\d+""".r <~ CRLF map (x => (x.toInt, x.length + 2))
 }
 
 class SkipReader (chunks: List[(Int, Int)], reader: Reader[Char]) extends Reader[Char] {

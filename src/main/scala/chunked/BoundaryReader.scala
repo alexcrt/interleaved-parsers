@@ -11,11 +11,9 @@ import NumberParser.Success
  */
 
 object NumberParser extends RegexParsers {
-
   override def skipWhitespace = false
-
   def CRLF = "\n"
-  def number: Parser[Int] = CRLF ~>  """\d+""".r <~ CRLF map (x => x.toInt)
+  def number: Parser[Int] = CRLF ~>  "\\d+".r <~ CRLF map (x => x.toInt)
 }
 
 class BoundaryReader (parseLen: Parser[Int], reader: Reader[Char]) extends Reader[Char] {
@@ -33,7 +31,6 @@ class BoundaryReader (parseLen: Parser[Int], reader: Reader[Char]) extends Reade
           case Success(le, rdrDropped) => len = le; rdr = rdrDropped
           case e => throw new RuntimeException(e.toString)
         }
-        return rdr.first
       }
     }
     rdr.first

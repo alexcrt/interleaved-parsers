@@ -5,6 +5,7 @@ import java.nio.charset.{StandardCharsets, Charset}
 import java.nio.file.{Files, Paths}
 
 import benchmarks.ChunkedGeneratorForBenchmark
+import utils.JsonParserWithoutSubSequence
 
 import scala.collection.immutable.PagedSeq
 import scala.io.Source
@@ -30,7 +31,7 @@ object MainInterleaved {
     val jsonResBound = JsonBoundaryParser.root(new BoundaryReader(NumberParser.number, new CharSequenceReader(toParse)))
     println(jsonResBound)
 */
-    val res2 = JsonParser.parse(new FileReader(new File("testing_files/demoJSON")))
+    val res2 = JsonParserWithoutSubSequence.parse(new FileReader(new File("testing_files/demoJSON")))
     println(res2)
 
     val buf = new PagedSeqReader(PagedSeq.fromReader(Source.fromFile(new File("testing_files/generatedChunkedJSON")).bufferedReader()))
@@ -93,9 +94,20 @@ object MainInterleaved {
 
   def main(args: Array[String]) = {
     //ChunkedGeneratorForBenchmark.generate("testing_files/demoJSON", "testing_files/generatedChunkedJSON", 50, true)
-    //interleaved()
-    //skipReader()
-    skip100test()
+    interleaved()
+    skipReader()
+    //skip100test()
+      val json = JsonParser.parse(new CharSequenceReader("{\"name\" : \"value\"}"))
+
+      val chunkedSequence =
+        new CharSequenceReader("\n2\n{\"\n4\nname\n2\n\":\n1\n\"\n8\nvalue\"}")
+
+      val chunkedJson =
+        JsonParser.parse(new BoundaryReader(NumberParser.number, chunkedSequence))
+
+      println(json)
+      println(chunkedJson)
+
   }
 
 }

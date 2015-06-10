@@ -9,6 +9,9 @@ import scala.util.parsing.input._
 /**
  * Created by alex on 25.04.15.
  */
+object StringParsers extends StringParsers {
+  override def skipWhitespace = false
+}
 trait StringParsers extends Parsers {
 
   type Elem = Char
@@ -63,7 +66,7 @@ trait StringParsers extends Parsers {
       var consumed = 0
       var rdr = in
 
-      if (skipWhitespace) rdr = handleWhiteSpace(rdr)
+      if(skipWhitespace) rdr = handleWhiteSpace(rdr)
 
       while (consumed < s.length && s.charAt(consumed) == rdr.first) {
         rdr = rdr.rest
